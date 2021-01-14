@@ -10,5 +10,5 @@ services:
             - TZ=US/Central
         ports:
             - 7777:7777
-        restart: always
-        command: "/terraria/tModLoaderServer"
+        restart: on-failure
+        command: "/terraria/tModLoaderServer -world /terraria/localshare/Terraria/ModLoader/Worlds/Home.wld -port 7777 -players 8"
