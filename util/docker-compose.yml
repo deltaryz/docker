@@ -1,7 +1,7 @@
 version: "2.1"
 services:
     vscode:
-        image: krlmlr/debian-ssh:latest
+        build: .
         container_name: vscode
         environment:
             - TZ=US/Central
@@ -11,4 +11,3 @@ services:
         ports:
             - "2222:22"
         restart: always
-        command: bash -c "sudo apt update && sudo apt install curl wget git -y && curl -sL https://deb.nodesource.com/setup_15.x | sudo -E bash - && sudo apt install -y nodejs && git config --global user.name 'deltaryz' && git config --global user.email 'wincam97@gmail.com' && /run.sh"
