@@ -1,0 +1,14 @@
+version: "2.1"
+services:
+    terraria:
+        image: debian:latest
+        container_name: terraria
+        volumes:
+            - /home/delta/game/terraria:/terraria
+            - /home/delta/game/terraria/localshare/Terraria:/root/.local/share/Terraria
+        environment:
+            - TZ=US/Central
+        ports:
+            - 7777:7777
+        restart: always
+        command: "/terraria/tModLoaderServer"
