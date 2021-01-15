@@ -1,3 +1,5 @@
+# This is broke as shit for various reasons
+# Probably not going to use this
 version: "2.1"
 services:
     vscode:
