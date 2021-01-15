@@ -7,12 +7,10 @@ services:
     volumes:
       - ${PWD}/conf/smb.conf:/etc/samba/smb.conf
       - /home/delta/:/share
+      - ${PWD}/conf/smb-init.sh:/smb-init.sh
     ports:
       - 10.69.69.3:445:445
     restart: always
     entrypoint:
-      - smbd
-      - --foreground
-      - --log-stdout
-      - --no-process-group
+      - /smb-init.sh
   
