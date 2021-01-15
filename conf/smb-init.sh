@@ -1,6 +1,5 @@
 #!/bin/sh
 
-chown -R nobody.nobody /share
-chmod -R 777 /share
+adduser -s /sbin/nologin -h /home/samba -H -D delta
 
 smbd --foreground --log-stdout --no-process-group
