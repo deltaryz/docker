@@ -13,4 +13,17 @@ services:
     restart: always
     entrypoint:
       - /smb-init.sh
+  blog:
+    image: algernon/writefreely:latest
+    container_name: blog
+    environment:
+      - WRITEFREELY_BIND_HOST=blog.cameronseid.com
+      - WRITEFREELY_BIND_PORT=7000
+      - WRITEFREELY_SINGLE_USER=true
+    volumes:
+      - /home/delta/blog:/data
+      - ${PWD}/conf/blog.ini:/data/config.ini
+    ports:
+      - 7000:8080
+    restart: always
   
