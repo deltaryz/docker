@@ -21,9 +21,27 @@ services:
       - WRITEFREELY_BIND_PORT=7000
       - WRITEFREELY_SINGLE_USER=true
     volumes:
-      - /home/delta/blog:/data
+      - blog_data:/data
       - ${PWD}/conf/blog.ini:/data/config.ini
     ports:
       - 7000:8080
     restart: always
-  
+  caddy:
+    image: caddy:2-alpine
+    container_name: caddy
+    restart: always
+    depends_on:
+      - "blog"
+    ports:
+      - 80:80
+      - 443:443
+    volumes:
+      - ${PWD}/conf/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+      - /home/delta/web:/srv
+
+volumes:
+  caddy_data:
+  caddy_config:
+  blog_data:
