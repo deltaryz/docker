@@ -1,0 +1,17 @@
+{
+    email me@cameronseid.com
+}
+
+floof.zone {
+    root * /srv/floof.zone
+    file_server
+}
+
+blog.cameronseid.com {
+    reverse_proxy floof.zone:7000
+}
+
+e669.fun {
+    root * /srv/e669.fun
+    file_server
+}
