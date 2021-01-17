@@ -27,7 +27,7 @@ services:
       - 7000:8080
     restart: always
   caddy:
-    image: caddy:2-alpine
+    image: abiosoft/caddy:no-stats
     container_name: caddy
     restart: always
     depends_on:
@@ -36,9 +36,8 @@ services:
       - 80:80
       - 443:443
     volumes:
-      - ${PWD}/conf/Caddyfile:/etc/caddy/Caddyfile
-      - caddy_data:/data
-      - caddy_config:/config
+      - ${PWD}/conf/Caddyfile:/etc/Caddyfile
+      - caddy_data:/root/.caddy
       - /home/delta/web:/srv
 
 volumes:
