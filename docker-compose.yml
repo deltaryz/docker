@@ -32,6 +32,8 @@ services:
     restart: always
     depends_on:
       - "blog"
+    environment:
+      - ACME_AGREE=true
     ports:
       - 80:80
       - 443:443
