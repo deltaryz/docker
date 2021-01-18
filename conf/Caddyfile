@@ -1,11 +1,18 @@
 floof.zone {
     tls delta@floof.zone
     root /srv/floof.zone
+    gzip
+
+    browse /files
 }
 
-cameronseid.com {
-    tls me@cameronseid.com
+www.cameronseid.com, cameronseid.com {
+    tls me@cameronseid.com {
+        protocols tls1.0 tls1.2
+    }
+
     root /srv/cameronseid.com
+    gzip
     
     git {
         repo        https://github.com/deltaryz/cameronseid.com
@@ -17,11 +24,25 @@ cameronseid.com {
 blog.cameronseid.com {
     tls me@cameronseid.com
     proxy / floof.zone:7000
+    gzip
+}
+
+deltaryz.com {
+    tls mail@deltaryz.com
+    root /srv/deltaryz.com
+    gzip
+}
+
+horsecock.party {
+    tls trash@horsecock.party
+    root /srv/horsecock.party
+    gzip
 }
 
 e669.fun {
     tls delta@floof.zone
     root /srv/e669.fun
+    gzip
 
     git {
         repo        https://github.com/deltaryz/e669-neo
@@ -35,4 +56,29 @@ e669.fun {
         then        rm -rf ../assets/
         then        sh -c "mv www/* ../"
     }
+}
+
+snuggle.monster {
+    tls delta@floof.zone
+    gzip
+    root /srv/snuggle.monster
+
+    git {
+        repo        https://github.com/deltaryz/tsgame
+        path        ./.repo
+        interval    1800
+
+        then        apk add --no-cache nodejs npm
+        then        npm install .
+        then        npm run-script build
+        then        sleep 2
+        then        rm -rf ../assets/
+        then        sh -c "mv dist/* ../"
+    }
+}
+
+snuggle.website {
+    tls delta@floof.zone
+    gzip
+    root /srv/snuggle.website
 }
