@@ -4,8 +4,10 @@
 version: "2.1"
 services:
     terraria:
-        image: debian:unstable-slim
+        image: debian:stable-slim
         container_name: terraria
+        tty: true
+        restart: always
         volumes:
             - /home/delta/game/terraria:/terraria
             - /home/delta/game/terraria/localshare/Terraria:/root/.local/share/Terraria
