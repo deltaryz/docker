@@ -3,7 +3,7 @@
 version: "2.1"
 services:
     terraria:
-        image: debian:latest
+        image: debian:unstable-slim
         container_name: terraria
         volumes:
             - /home/delta/game/terraria:/terraria
@@ -12,5 +12,4 @@ services:
             - TZ=US/Central
         ports:
             - 7777:7777
-        restart: on-failure
-        command: "/terraria/tModLoaderServer -world /terraria/localshare/Terraria/ModLoader/Worlds/Home.wld -port 7777 -players 8"
+        command: bash /terraria/start.sh
