@@ -4,7 +4,7 @@
 version: "2.1"
 services:
     terraria:
-        image: debian:stable-slim
+        image: frolvlad/alpine-mono:latest
         container_name: terraria
         tty: true
         restart: always
@@ -15,4 +15,4 @@ services:
             - TZ=US/Central
         ports:
             - 7777:7777
-        command: bash /terraria/start.sh
+        command: sh /terraria/start.sh
