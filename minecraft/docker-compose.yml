@@ -1,0 +1,11 @@
+version: "2.1"
+services:
+  minecraft:
+    image: adoptopenjdk/openjdk14:alpine-slim 
+    container_name: minecraft
+    tty: true
+    volumes:
+      - /home/delta/game/minecraft/floof.zone:/minecraft
+    ports:
+      - 25565:25565
+    command: sh /minecraft/start.sh
