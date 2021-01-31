@@ -9,8 +9,8 @@ services:
         tty: true
         restart: always
         volumes:
-            - /home/delta/game/terraria:/terraria
-            - /home/delta/game/terraria/localshare/Terraria:/root/.local/share/Terraria
+            - /home/delta/game/terraria/2021-01-19-tshock:/terraria
+            - /home/delta/game/terraria/2021-01-19-tshock/localshare/Terraria:/root/.local/share/Terraria
         environment:
             - TZ=US/Central
         ports:
