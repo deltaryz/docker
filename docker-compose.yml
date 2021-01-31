@@ -41,6 +41,7 @@ services:
       - ${PWD}/conf/Caddyfile:/etc/Caddyfile
       - caddy_data:/root/.caddy
       - /home/delta/web:/srv
+      - /home/delta/web/floof.zone/files/dj:/srv/deltaryz.com/mixes
 
 volumes:
   caddy_data:
