@@ -1,0 +1,9 @@
+etc-dnsmasq.d/
+etc-pihole/
+.ssh/
+data/
+extensions/
+workspace/
+.gitconfig
+.bash_history
+.local/

@@ -20,3 +20,17 @@ services:
       - './etc-pihole/:/etc/pihole/'
       - './etc-dnsmasq.d/:/etc/dnsmasq.d/'
     restart: always
+  vscode:
+    container_name: vscode
+    image: ghcr.io/linuxserver/code-server
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=US/Central
+    volumes:
+      - ./vscode:/config
+      - /home/delta/dev:/config/workspace
+      - /home/delta/.ssh:/config/.ssh
+    ports:
+      - 8443:8443
+    restart: always
