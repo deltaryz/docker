@@ -7,3 +7,6 @@ workspace/
 .gitconfig
 .bash_history
 .local/
+.cache/
+.npm/
+configstore/
