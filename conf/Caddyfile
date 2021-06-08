@@ -6,6 +6,18 @@ floof.zone {
     browse /files
 }
 
+sd.floof.zone {
+    tls delta@floof.zone
+    gzip
+
+    root /srv/sd.floof.zone
+
+    proxy /server http://snapdrop:3000 {
+        transparent
+        websocket
+    }
+}
+
 www.cameronseid.com, cameronseid.com {
     tls me@cameronseid.com {
         protocols tls1.0 tls1.2

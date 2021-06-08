@@ -43,6 +43,19 @@ services:
       - /home/delta/web:/srv
       - /home/delta/web/floof.zone/files/dj:/srv/deltaryz.com/mixes
       - /home/delta/win10:/srv/floof.zone/files/os/win10
+  snapdrop:
+    image: "node:lts-alpine"
+    container_name: "snapdrop"
+    depends_on:
+      - "caddy"
+    user: "node"
+    restart: always
+    working_dir: /home/node/app
+    volumes:
+      - ./snapdrop/:/home/node/app
+    command: ash -c "npm i && node index.js"
+    ports:
+      - "3000:3000"
 
 volumes:
   caddy_data:
