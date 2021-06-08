@@ -1,18 +1,28 @@
-version: "2.1"
+version: "3.8"
 services:
-  samba:
-    image: stanback/alpine-samba:latest
-    container_name: samba
+  nfs:
+    image: erichough/nfs-server:latest
+    container_name: nfs
     privileged: true
+    dns: 10.69.69.14
     volumes:
-      - ${PWD}/conf/smb.conf:/etc/samba/smb.conf
-      - /home/delta/:/share
-      - ${PWD}/conf/smb-init.sh:/smb-init.sh
+      - "/home/delta:/share"
     ports:
-      - 10.69.69.3:445:445
+      - "10.69.69.3:2049:2049"
+      - "10.69.69.3:2049:2049/udp"
+      - "10.69.69.3:111:111/udp"
+      - "10.69.69.3:32765:32765"
+      - "10.69.69.3:32767:32767"
+      - "10.69.69.3:111:111"
+      - "10.69.69.3:32765:32765/udp"
+      - "10.69.69.3:32767:32767/udp"
+    environment:
+      - NFS_EXPORT_0=/share *(rw,no_subtree_check)
+      - NFS_SERVER_THREAD_COUNT=16
+    cap_add:
+      - SYS_ADMIN
+      - SYS_MODULE
     restart: always
-    entrypoint:
-      - /smb-init.sh
   blog:
     image: algernon/writefreely:latest
     container_name: blog
@@ -21,10 +31,10 @@ services:
       - WRITEFREELY_BIND_PORT=7000
       - WRITEFREELY_SINGLE_USER=true
     volumes:
-      - blog_data:/data
-      - ${PWD}/conf/blog.ini:/data/config.ini
+      - "blog_data:/data"
+      - "${PWD}/conf/blog.ini:/data/config.ini"
     ports:
-      - 7000:8080
+      - "7000:8080"
     restart: always
   caddy:
     image: abiosoft/caddy:no-stats
@@ -35,24 +45,24 @@ services:
     environment:
       - ACME_AGREE=true
     ports:
-      - 80:80
-      - 443:443
+      - "80:80"
+      - "443:443"
     volumes:
-      - ${PWD}/conf/Caddyfile:/etc/Caddyfile
-      - caddy_data:/root/.caddy
-      - /home/delta/web:/srv
-      - /home/delta/web/floof.zone/files/dj:/srv/deltaryz.com/mixes
-      - /home/delta/win10:/srv/floof.zone/files/os/win10
+      - "${PWD}/conf/Caddyfile:/etc/Caddyfile"
+      - "caddy_data:/root/.caddy"
+      - "/home/delta/web:/srv"
+      - "/home/delta/web/floof.zone/files/dj:/srv/deltaryz.com/mixes"
+      - "/home/delta/win10:/srv/floof.zone/files/os/win10"
   snapdrop:
     image: "node:lts-alpine"
-    container_name: "snapdrop"
+    container_name: snapdrop
     depends_on:
       - "caddy"
     user: "node"
     restart: always
     working_dir: /home/node/app
     volumes:
-      - ./snapdrop/:/home/node/app
+      - "./snapdrop/:/home/node/app"
     command: ash -c "npm i && node index.js"
     ports:
       - "3000:3000"
