@@ -35,7 +35,7 @@ www.cameronseid.com, cameronseid.com {
 
 blog.cameronseid.com {
     tls me@cameronseid.com
-    proxy / floof.zone:7000
+    proxy / floof.zone:22222
     gzip
 }
 

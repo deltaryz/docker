@@ -26,15 +26,11 @@ services:
   blog:
     image: algernon/writefreely:latest
     container_name: blog
-    environment:
-      - WRITEFREELY_BIND_HOST=blog.cameronseid.com
-      - WRITEFREELY_BIND_PORT=7000
-      - WRITEFREELY_SINGLE_USER=true
     volumes:
       - "blog_data:/data"
-      - "${PWD}/conf/blog.ini:/data/config.ini"
+      - "./conf/blog.ini:/data/config.ini"
     ports:
-      - "7000:8080"
+      - "22222:22222"
     restart: always
   caddy:
     image: abiosoft/caddy:no-stats
@@ -48,7 +44,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - "${PWD}/conf/Caddyfile:/etc/Caddyfile"
+      - "./conf/Caddyfile:/etc/Caddyfile"
       - "caddy_data:/root/.caddy"
       - "/home/delta/web:/srv"
       - "/home/delta/web/floof.zone/files/dj:/srv/deltaryz.com/mixes"
@@ -69,5 +65,4 @@ services:
 
 volumes:
   caddy_data:
-  caddy_config:
   blog_data:
