@@ -6,8 +6,8 @@ services:
     terraria:
         # alpine-mono is significantly smaller/lighter but doesn't work on arm cpus
         # still crazy that regular mono does!
-        image: frolvlad/alpine-mono:latest
-        #image: mono:latest
+        #image: frolvlad/alpine-mono:latest
+        image: mono:latest
         container_name: terraria
         tty: true
         restart: always

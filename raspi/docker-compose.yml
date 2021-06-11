@@ -32,5 +32,5 @@ services:
       - /home/delta/dev:/config/workspace
       - /home/delta/.ssh:/config/.ssh
     ports:
-      - 8443:8443
+      - "8443:8443"
     restart: always
