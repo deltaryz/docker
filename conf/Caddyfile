@@ -6,6 +6,8 @@ floof.zone {
 
     browse /files
 
+    proxy /admin 10.69.69.1:80
+
 }
 
 10.69.69.69:80 {
