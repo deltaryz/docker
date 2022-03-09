@@ -10,11 +10,8 @@ floof.zone {
 
 10.69.69.69:80 {
     root /srv/floof.zone
-    gzip
 
     browse /files
-
-    proxy /pihole 10.69.69.1:80
 
     # this only works because of the pi zero 2 running a reverse proxy to the router
     redir /router /router/
