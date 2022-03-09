@@ -3,21 +3,22 @@ services:
   nfs:
     image: erichough/nfs-server:latest
     container_name: nfs
+    dns: 1.1.1.1
+    user: root
     privileged: true
-    dns: 10.69.69.14
     volumes:
       - "/home/delta:/share"
     ports:
-      - "10.69.69.3:2049:2049"
-      - "10.69.69.3:2049:2049/udp"
-      - "10.69.69.3:111:111/udp"
-      - "10.69.69.3:32765:32765"
-      - "10.69.69.3:32767:32767"
-      - "10.69.69.3:111:111"
-      - "10.69.69.3:32765:32765/udp"
-      - "10.69.69.3:32767:32767/udp"
+      - "10.69.69.69:2049:2049"
+      - "10.69.69.69:2049:2049/udp"
+      - "10.69.69.69:111:111/udp"
+      - "10.69.69.69:32765:32765"
+      - "10.69.69.69:32767:32767"
+      - "10.69.69.69:111:111"
+      - "10.69.69.69:32765:32765/udp"
+      - "10.69.69.69:32767:32767/udp"
     environment:
-      - NFS_EXPORT_0=/share *(rw,no_subtree_check)
+      - NFS_EXPORT_0=/share *(rw,insecure,all_squash,no_subtree_check,async)
       - NFS_SERVER_THREAD_COUNT=16
     cap_add:
       - SYS_ADMIN
@@ -49,19 +50,25 @@ services:
       - "/home/delta/web:/srv"
       - "/home/delta/web/floof.zone/files/dj:/srv/deltaryz.com/mixes"
       - "/home/delta/win10:/srv/floof.zone/files/os/win10"
-  snapdrop:
-    image: "node:lts-alpine"
-    container_name: snapdrop
-    depends_on:
-      - "caddy"
-    user: "node"
-    restart: always
-    working_dir: /home/node/app
+      - "/home/delta/torrents:/srv/floof.zone/files/torrents"
+  jellyfin:
+    image: ghcr.io/linuxserver/jellyfin
+    container_name: jellyfin
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=US/Central
     volumes:
-      - "./snapdrop/:/home/node/app"
-    command: ash -c "npm i && node index.js"
+      - /home/delta/jellyfin:/config
+      - /home/delta/nas/video:/data/tvshows
+      #- /path/to/movies:/data/movies
+      #- /opt/vc/lib:/opt/vc/lib #optional
     ports:
-      - "3000:3000"
+      - 8096:8096
+      - 8920:8920 #optional
+      - 7359:7359/udp #optional
+      - 1900:1900/udp #optional
+    restart: unless-stopped
 
 volumes:
   caddy_data:
