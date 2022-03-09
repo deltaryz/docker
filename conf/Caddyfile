@@ -7,9 +7,8 @@ floof.zone {
 
     proxy /torrents floof.zone:3069 
 
-    rewrite /pihole /pihole/
-
-    proxy /admin 10.69.69.1:80
+    proxy /pihole 10.69.69.1:80
+    proxy /router 10.69.69.70:80
 
 }
 
