@@ -6,6 +6,7 @@ services:
     container_name: vscode
     image: ghcr.io/linuxserver/code-server
     user: 1000:1000
+    privileged: true
     environment:
       - PUID=1000
       - PGID=1000
