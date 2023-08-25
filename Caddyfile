@@ -6,8 +6,6 @@ floof.zone {
 
     browse /files
 
-    proxy /admin 10.69.69.1:80
-
 }
 
 cheekibreeki.lol {
@@ -17,17 +15,6 @@ cheekibreeki.lol {
     gzip
 
 }
-
-10.69.69.69:80 {
-    root /srv/floof.zone
-
-    browse /files
-
-    # this only works because of the pihole running a reverse proxy to the router
-    redir /router /router/
-    proxy /router/ 10.69.69.1:6969
-}
-
 
 deltaryz.com {
     tls mail@deltaryz.com
@@ -68,6 +55,7 @@ cors.e669.fun {
     proxy / http://e669.fun:8765
 }
 
+# TODO: make a docker container for this
 goty2.floof.zone {
     tls delta@floof.zone
     proxy /io http://floof.zone:3000 {
