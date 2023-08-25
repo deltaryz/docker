@@ -55,15 +55,12 @@ cors.e669.fun {
     proxy / http://e669.fun:8765
 }
 
-# TODO: make a docker container for this
-goty2.floof.zone {
-    tls delta@floof.zone
-    proxy /io http://floof.zone:3000 {
-      without /io
-      websocket
-    }
+http://goty2.floof.zone {
+    root /srv/goty2.floof.zone
+}
 
-    proxy / http://floof.zone:8080
+https://goty2.floof.zone { 
+    redir http://goty2.floof.zone:80
 }
 
 eevee.email {
