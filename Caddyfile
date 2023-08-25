@@ -1,0 +1,86 @@
+floof.zone {
+
+    tls delta@floof.zone
+    root /srv/floof.zone
+    gzip
+
+    browse /files
+
+    proxy /admin 10.69.69.1:80
+
+}
+
+cheekibreeki.lol {
+
+    tls cykablyat@cheekibreeki.lol
+    root /srv/cheekibreeki.lol
+    gzip
+
+}
+
+10.69.69.69:80 {
+    root /srv/floof.zone
+
+    browse /files
+
+    # this only works because of the pihole running a reverse proxy to the router
+    redir /router /router/
+    proxy /router/ 10.69.69.1:6969
+}
+
+
+deltaryz.com {
+    tls mail@deltaryz.com
+    root /srv/deltaryz.com
+    gzip
+
+    browse /mixes
+}
+
+blog.deltaryz.com {
+    tls mail@deltaryz.com
+    root /srv/blog.deltaryz.com
+
+    git {
+        repo https://github.com/deltaryz/blog
+        branch main
+        interval 1200
+        clone_args --depth 1
+        pull_args --force
+        then sh /srv/blog.deltaryz.com/update.sh
+    }
+}
+
+horsecock.party {
+    tls trash@horsecock.party
+    root /srv/horsecock.party
+    gzip
+}
+
+e669.fun {
+    tls delta@floof.zone
+    root /srv/e669.fun
+    gzip
+}
+
+cors.e669.fun {
+    tls delta@floof.zone
+    proxy / http://e669.fun:8765
+}
+
+goty2.floof.zone {
+    tls delta@floof.zone
+    proxy /io http://floof.zone:3000 {
+      without /io
+      websocket
+    }
+
+    proxy / http://floof.zone:8080
+}
+
+eevee.email {
+    tls delta@eevee.email
+    proxy / http://eevee.email:25585 {
+      websocket
+    }
+}
