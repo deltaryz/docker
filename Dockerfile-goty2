@@ -1,3 +1,6 @@
+# This is super dirty and bad
+# Find a better way to deploy this
+
 FROM node:alpine
 
 RUN apk add --no-cache git
@@ -9,4 +12,4 @@ WORKDIR /goty2
 RUN npm install .
 
 ENTRYPOINT ["/bin/sh"]
-CMD ["host-server.sh"]
+CMD ["build-and-run-server.sh"]

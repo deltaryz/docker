@@ -8,6 +8,8 @@ services:
     restart: always
     ports:
       - "3000:3000"
+    volumes:
+      - "/home/delta/web/goty2.floof.zone:/srv"
   caddy:
     build:
       context: .
