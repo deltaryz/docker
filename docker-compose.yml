@@ -1,44 +1,12 @@
 version: "3.8"
 services:
-  nfs:
-    image: erichough/nfs-server:latest
-    container_name: nfs
-    dns: 1.1.1.1
-    user: root
-    privileged: true
-    volumes:
-      - "/home/delta:/share"
-    ports:
-      - "10.69.69.69:2049:2049"
-      - "10.69.69.69:2049:2049/udp"
-      - "10.69.69.69:111:111/udp"
-      - "10.69.69.69:32765:32765"
-      - "10.69.69.69:32767:32767"
-      - "10.69.69.69:111:111"
-      - "10.69.69.69:32765:32765/udp"
-      - "10.69.69.69:32767:32767/udp"
-    environment:
-      - NFS_EXPORT_0=/share *(rw,insecure,all_squash,no_subtree_check,async)
-      - NFS_SERVER_THREAD_COUNT=16
-    cap_add:
-      - SYS_ADMIN
-      - SYS_MODULE
-    restart: always
-  blog:
-    image: algernon/writefreely:latest
-    container_name: blog
-    volumes:
-      - "blog_data:/data"
-      - "./conf/blog.ini:/data/config.ini"
-    ports:
-      - "22222:22222"
-    restart: always
   caddy:
-    image: abiosoft/caddy:no-stats
+    build:
+      context: .
+      dockerfile: Dockerfile
+    # image: abiosoft/caddy:no-stats
     container_name: caddy
     restart: always
-    depends_on:
-      - "blog"
     environment:
       - ACME_AGREE=true
     ports:
@@ -51,25 +19,22 @@ services:
       - "/home/delta/web/floof.zone/files/dj:/srv/deltaryz.com/mixes"
       - "/home/delta/win10:/srv/floof.zone/files/os/win10"
       - "/home/delta/torrents:/srv/floof.zone/files/torrents"
-  jellyfin:
-    image: ghcr.io/linuxserver/jellyfin
-    container_name: jellyfin
+  minecraft:
+    image: marctv/minecraft-papermc-server:latest
+    container_name: minecraft
+    restart: always
     environment:
       - PUID=1000
       - PGID=1000
-      - TZ=US/Central
-    volumes:
-      - /home/delta/jellyfin:/config
-      - /home/delta/nas/video:/data/tvshows
-      #- /path/to/movies:/data/movies
-      #- /opt/vc/lib:/opt/vc/lib #optional
+      - MEMORYSIZE=2G
     ports:
-      - 8096:8096
-      - 8920:8920 #optional
-      - 7359:7359/udp #optional
-      - 1900:1900/udp #optional
-    restart: unless-stopped
+      - "25565:25565"
+      - "25575:25575"
+      - "25585:25585"
+      - "19132:19132/udp"
+    volumes:
+      - "/home/delta/game/minecraft:/data:rw"
+      - "/home/delta/game/minecraft/server.jar:/opt/minecraft/paperspigot.jar"
 
 volumes:
   caddy_data:
-  blog_data:
