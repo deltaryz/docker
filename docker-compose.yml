@@ -13,7 +13,7 @@ services:
       - "80:80"
       - "443:443"
     volumes:
-      - "./conf/Caddyfile:/etc/Caddyfile"
+      - "./Caddyfile:/etc/Caddyfile"
       - "caddy_data:/root/.caddy"
       - "/home/delta/web:/srv"
       - "/home/delta/web/floof.zone/files/dj:/srv/deltaryz.com/mixes"
