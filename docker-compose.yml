@@ -18,7 +18,6 @@ services:
       - "/home/delta/web:/srv"
       - "/home/delta/web/floof.zone/files/dj:/srv/deltaryz.com/mixes"
       - "/home/delta/win10:/srv/floof.zone/files/os/win10"
-      - "/home/delta/torrents:/srv/floof.zone/files/torrents"
   minecraft:
     image: marctv/minecraft-papermc-server:latest
     container_name: minecraft
