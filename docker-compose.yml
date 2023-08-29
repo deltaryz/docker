@@ -1,5 +1,14 @@
 version: "3.8"
 services:
+  cors:
+    image: testcab/cors-anywhere
+    container_name: cors
+    restart: always
+    ports:
+      - "8765:8765"
+    environment:
+      - PORT=8765
+      - CORSANYWHERE_WHITELIST=https://e669.fun
   goty2:
     build:
       context: .

@@ -59,10 +59,6 @@ http://goty2.floof.zone {
     root /srv/goty2.floof.zone
 }
 
-https://goty2.floof.zone { 
-    redir http://goty2.floof.zone:80
-}
-
 eevee.email {
     tls delta@eevee.email
     proxy / http://eevee.email:25585 {
