@@ -24,6 +24,21 @@ deltaryz.com {
     browse /mixes
 }
 
+listen.deltaryz.com {
+    tls mail@deltaryz.com
+    gzip
+
+    proxy / http://100.83.141.4:4533
+}
+
+mixes.deltaryz.com {
+    tls mail@deltaryz.com
+    root /srv/deltaryz.com/mixes
+    gzip
+
+    browse /
+}
+
 blog.deltaryz.com {
     tls mail@deltaryz.com
     root /srv/blog.deltaryz.com
