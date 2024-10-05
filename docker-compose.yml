@@ -26,6 +26,8 @@ services:
     # image: abiosoft/caddy:no-stats
     container_name: caddy
     restart: always
+    networks:
+      - reverse_proxy
     environment:
       - ACME_AGREE=true
     ports:
@@ -35,25 +37,45 @@ services:
       - "./Caddyfile:/etc/Caddyfile"
       - "caddy_data:/root/.caddy"
       - "/home/delta/web:/srv"
-      - "/home/delta/web/floof.zone/files/dj:/srv/deltaryz.com/mixes"
       - "/home/delta/win10:/srv/floof.zone/files/os/win10"
-  minecraft:
-    image: marctv/minecraft-papermc-server:latest
-    container_name: minecraft
+      - "/home/delta/web/floof.zone/files/dj:/srv/mixes.deltaryz.com"
+#  minecraft:
+#    image: marctv/minecraft-papermc-server:latest
+#    container_name: minecraft
+#    restart: always
+#    environment:
+#      - PUID=1000
+#      - PGID=1000
+#      - MEMORYSIZE=2G
+#      - PAPERMC_FLAGS=
+#    ports:
+#      - "25565:25565"
+#      - "25575:25575"
+#      - "25585:25585"
+#      - "19132:19132/udp"
+#    volumes:
+#      - "/home/delta/game/minecraft:/data:rw"
+#      - "/home/delta/game/minecraft:/opt/minecraft"
+#      # - "/home/delta/game/minecraft/server.jar:/opt/minecraft/paperspigot.jar"
+#    entrypoint: ["java", "-jar", "-Xms2G", "-Xmx2G", "/data/paperspigot.jar", "nogui"]
+  transfer:
+    image: dutchcoders/transfer.sh:latest
+    container_name: transfer
     restart: always
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - MEMORYSIZE=2G
-      - PAPERMC_FLAGS=
+    networks:
+      reverse_proxy:
+        ipv4_address: 169.169.0.8
+    command: ["--provider", "local", "--basedir", "/tmp/", "--listener", ":80", "--purge-days", "30"]
     ports:
-      - "25565:25565"
-      - "25575:25575"
-      - "25585:25585"
-      - "19132:19132/udp"
-    volumes:
-      - "/home/delta/game/minecraft:/data:rw"
-      - "/home/delta/game/minecraft/server.jar:/opt/minecraft/paperspigot.jar"
+      - "80"
+
+networks:
+  reverse_proxy:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+        - subnet: 169.169.0.0/24
 
 volumes:
   caddy_data:

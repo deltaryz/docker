@@ -13,6 +13,8 @@ cheekibreeki.lol {
     tls cykablyat@cheekibreeki.lol
     root /srv/cheekibreeki.lol
     gzip
+    
+    browse /mixes
 
 }
 
@@ -21,7 +23,96 @@ deltaryz.com {
     root /srv/deltaryz.com
     gzip
 
-    browse /mixes
+    git {
+        repo https://github.com/deltaryz/deltaryz.com
+        branch main
+        interval 1200
+        clone_args --depth 1
+        pull_args --force
+        then sh /srv/deltaryz.com/update.sh
+    }
+}
+
+pvfm.deltaryz.com {
+    tls mail@deltaryz.com
+    root /srv/pvfm.deltaryz.com
+    gzip
+}
+
+luna.deltaryz.com {
+    tls mail@deltaryz.com
+    
+    proxy / http://luna.ponyvillefm.com/api/nowplaying_static/lunaradio.json {
+        without /
+        transparent
+    }
+}
+
+luna2.deltaryz.com {
+    tls mail@deltaryz.com
+
+    proxy / http://luna.ponyvillefm.com/listen/lunaradio/radio.mp3 {
+        without /
+        transparent
+    }
+}
+
+arena.deltaryz.com {
+    tls mail@deltaryz.com
+    root /srv/arena.deltaryz.com
+    gzip
+}
+
+music.deltaryz.com {
+    tls mail@deltaryz.com
+    root /srv/music.deltaryz.com
+    gzip
+}
+
+gbjam.deltaryz.com {
+    tls mail@deltaryz.com
+    root /srv/gbjam.deltaryz.com
+    gzip
+}
+
+horsepower.deltaryz.com {
+    tls mail@deltaryz.com
+    gzip
+
+    proxy / http://100.92.21.10:7495 {
+        header_upstream Cross-Origin-Opener-Policy "same-origin"
+        header_upstream Cross-Origin-Embedder-Policy "require-corp"
+    }
+}
+
+devw.deltaryz.com {
+    tls mail@deltaryz.com
+    gzip
+
+    proxy / http://100.82.146.54:8000 {
+        header_upstream Cross-Origin-Opener-Policy "same-origin"
+        header_upstream Cross-Origin-Embedder-Policy "require-corp"
+    }
+}
+
+devl.deltaryz.com {
+    tls mail@deltrayz.com
+    gzip
+
+    proxy / http://100.94.6.112:8000 {
+        header_upstream Cross-Origin-Opener-Policy "same-origin"
+        header_upstream Cross-Origin-Embedder-Policy "require-corp"
+    }
+}
+
+share.deltaryz.com {
+    tls mail@deltaryz.com
+    gzip
+
+    proxy / http://100.83.141.4:11169 {
+      header_upstream Host "share.deltaryz.com"
+      header_upstream X-Forwarded-Proto "https"
+    }
 }
 
 listen.deltaryz.com {
@@ -33,7 +124,7 @@ listen.deltaryz.com {
 
 mixes.deltaryz.com {
     tls mail@deltaryz.com
-    root /srv/deltaryz.com/mixes
+    root /srv/mixes.deltaryz.com
     gzip
 
     browse /
