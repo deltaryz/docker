@@ -37,21 +37,40 @@ pvfm.deltaryz.com {
     tls mail@deltaryz.com
     root /srv/pvfm.deltaryz.com
     gzip
+
+    header / {
+        Cache-Control "no-cache, no-store, must-revalidate"
+        Pragma "no-cache"
+        Expires "0"
+    }
+
+    git {
+        repo https://github.com/deltaryz/pvfm
+        branch main
+        interval 1200
+        clone_args --depth 1
+        pull_args --force
+    }
+}
+
+pegasausage.deltaryz.com {
+    tls mail@deltaryz.com
+    root /srv/pegasausage.deltaryz.com
+    gzip
+
+    git {
+        repo https://github.com/deltaryz/pegasausage
+        branch master
+        interval 1200
+        clone_args --depth 1
+        pull_args --force
+    }
 }
 
 luna.deltaryz.com {
     tls mail@deltaryz.com
     
     proxy / http://luna.ponyvillefm.com/api/nowplaying_static/lunaradio.json {
-        without /
-        transparent
-    }
-}
-
-luna2.deltaryz.com {
-    tls mail@deltaryz.com
-
-    proxy / http://luna.ponyvillefm.com/listen/lunaradio/radio.mp3 {
         without /
         transparent
     }
@@ -161,7 +180,7 @@ cors.e669.fun {
     proxy / http://e669.fun:8765
 }
 
-http://goty2.floof.zone {
+http://goty2.floof.zone, http://goty2.deltaryz.com {
     root /srv/goty2.floof.zone
 }
 
