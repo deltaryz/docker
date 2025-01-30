@@ -8,6 +8,16 @@ floof.zone {
 
 }
 
+map.floof.zone {
+    tls delta@floof.zone
+    gzip 
+
+    proxy / http://floof.zone:8100 {
+        without /
+        transparent
+    }
+}
+
 cheekibreeki.lol {
 
     tls cykablyat@cheekibreeki.lol
