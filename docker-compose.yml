@@ -38,7 +38,7 @@ services:
       - "caddy_data:/root/.caddy"
       - "/home/delta/web:/srv"
       - "/home/delta/win10:/srv/floof.zone/files/os/win10"
-      - "/home/delta/web/floof.zone/files/dj:/srv/mixes.deltaryz.com"
+      - "/home/delta/∆•MIX:/srv/mixes.deltaryz.com"
   syncthing:
     image: lscr.io/linuxserver/syncthing:latest
     container_name: syncthing
@@ -49,7 +49,7 @@ services:
     volumes:
       - /home/delta/syncthing_config:/config
       - /home/delta/syncthing:/data1
-      - /home/delta/web/floof.zone/files/dj:/data2
+      - /home/delta/∆•MIX:/data2
     ports:
       - 100.92.21.10:8384:8384
       - 100.92.21.10:22000:22000/tcp
