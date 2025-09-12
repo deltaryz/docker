@@ -1,24 +1,6 @@
-version: "3.8"
 services:
-  cors:
-    image: testcab/cors-anywhere
-    container_name: cors
-    restart: always
-    ports:
-      - "8765:8765"
-    environment:
-      - PORT=8765
-      - CORSANYWHERE_WHITELIST=https://e669.fun
-  goty2:
-    build:
-      context: .
-      dockerfile: Dockerfile-goty2
-    container_name: goty2
-    restart: always
-    ports:
-      - "3000:3000"
-    volumes:
-      - "/home/delta/web/goty2.floof.zone:/srv"
+
+  # Caddy webserver
   caddy:
     build:
       context: .
@@ -26,8 +8,6 @@ services:
     # image: abiosoft/caddy:no-stats
     container_name: caddy
     restart: always
-    networks:
-      - reverse_proxy
     environment:
       - ACME_AGREE=true
     ports:
@@ -37,62 +17,48 @@ services:
       - "./Caddyfile:/etc/Caddyfile"
       - "caddy_data:/root/.caddy"
       - "/home/delta/web:/srv"
-      - "/home/delta/win10:/srv/floof.zone/files/os/win10"
-      - "/home/delta/∆•MIX:/srv/mixes.deltaryz.com"
+
+  # Syncthing file sync daemon and webui
   syncthing:
     image: lscr.io/linuxserver/syncthing:latest
     container_name: syncthing
     environment:
-      - PUID=1000
-      - PGID=1000
+      - PUID=1002
+      - PGID=1002
       - TZ=America/Los_Angeles
     volumes:
       - /home/delta/syncthing_config:/config
       - /home/delta/syncthing:/data1
-      - /home/delta/∆•MIX:/data2
     ports:
-      - 100.92.21.10:8384:8384
-      - 100.92.21.10:22000:22000/tcp
-      - 100.92.21.10:22000:22000/udp
-      - 100.92.21.10:21027:21027/udp
-    restart: unless-stopped
-#  minecraft:
-#    image: marctv/minecraft-papermc-server:latest
-#    container_name: minecraft
-#    restart: always
-#    environment:
-#      - PUID=1000
-#      - PGID=1000
-#      - MEMORYSIZE=2G
-#      - PAPERMC_FLAGS=
-#    ports:
-#      - "25565:25565"
-#      - "25575:25575"
-#      - "25585:25585"
-#      - "19132:19132/udp"
-#    volumes:
-#      - "/home/delta/game/minecraft:/data:rw"
-#      - "/home/delta/game/minecraft:/opt/minecraft"
-#      # - "/home/delta/game/minecraft/server.jar:/opt/minecraft/paperspigot.jar"
-#    entrypoint: ["java", "-jar", "-Xms2G", "-Xmx2G", "/data/paperspigot.jar", "nogui"]
-  transfer:
-    image: dutchcoders/transfer.sh:latest
-    container_name: transfer
+      - 100.103.133.29:8384:8384
+      - 100.103.133.29:22000:22000/tcp
+      - 100.103.133.29:22000:22000/udp
+      - 100.103.133.29:21027:21027/udp
     restart: always
-    networks:
-      reverse_proxy:
-        ipv4_address: 169.169.0.8
-    command: ["--provider", "local", "--basedir", "/tmp/", "--listener", ":80", "--purge-days", "30"]
-    ports:
-      - "80"
 
-networks:
-  reverse_proxy:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-        - subnet: 169.169.0.0/24
+  # Server for horsepower.deltaryz.com
+  horsepower:
+    image: python:3.12-slim
+    container_name: horsepower
+    ports:
+      - "7499:7499"
+    volumes:
+      - "./horsepower:/app"
+    entrypoint: ["python3", "/app/serve.py", "-p", "7499", "-r", ".", "-n"]
+    #command: python3 /app/serve.py -p 7495 -r . -n
+
+  # Server for goty2 multiplayer dungeon
+  goty2:
+    build:
+      context: .
+      dockerfile: Dockerfile-goty2
+    container_name: goty2
+    restart: always
+    ports:
+      - "3000:3000"
+    volumes:
+      - "/home/delta/web/goty2.floof.zon:/srv"
 
 volumes:
   caddy_data:
+        

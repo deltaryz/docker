@@ -9,6 +9,9 @@ VOLUME /root/.caddy /srv
 WORKDIR /srv
 
 RUN /usr/bin/caddy -version
+
+RUN git config --global --add safe.directory /srv/*
+
 ENTRYPOINT [ "/usr/bin/caddy" ]
 CMD ["--conf", "/etc/Caddyfile", "--log", "stdout", "--agree=true"]
 

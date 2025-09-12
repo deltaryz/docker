@@ -1,0 +1,15 @@
+# This is super dirty and bad
+# Find a better way to deploy this
+
+FROM node:alpine
+
+RUN apk add --no-cache git
+RUN mkdir /goty2
+RUN git clone https://github.com/bytesizedpacket/goty2 /goty2
+
+WORKDIR /goty2
+
+RUN npm install .
+
+ENTRYPOINT ["/bin/sh"]
+CMD ["build-and-run-server.sh"]
