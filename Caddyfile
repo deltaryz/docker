@@ -64,7 +64,8 @@ floof.zone {
     gzip
 
     # running on atybox
-    proxy /files http://100.111.32.61:5678 {
+    redir /files /files/ 301
+    proxy /files/ http://100.111.32.61:5678 {
         without /files
     }
 }
@@ -111,7 +112,7 @@ watch.deltaryz.com {
     gzip
 
     # running on atybox
-    proxy / http://100.111.32.61:8096 {
+    proxy / http://100.103.147.17:8096 {
         transparent
 	websocket
     }
@@ -126,6 +127,17 @@ share.deltaryz.com {
     proxy / http://100.83.141.4:11169 {
         header_upstream Host "share.deltaryz.com"
 	header_upstream X-Forwarded-Proto "https"
+    }
+}
+
+# map.floof.zone (Minecraft server map)
+map.floof.zone {
+    tls delta@floof.zone
+    gzip 
+
+    proxy / http://100.103.147.17:8100 {
+        without /
+        transparent
     }
 }
 
