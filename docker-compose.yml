@@ -69,7 +69,7 @@ services:
     environment:
       - YT_API_KEY=${YT_API_KEY}
     ports:
-      - "3000:3000"
+      - "3001:3000"
     restart: always
 
 volumes:

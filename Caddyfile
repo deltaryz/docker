@@ -15,7 +15,7 @@ deltaryz.com {
         pull_args --force
     }
 
-    proxy /yt-next localhost:3000 {
+    proxy /yt-next localhost:3001 {
         transparent
         websocket
     }
@@ -36,8 +36,6 @@ blog.deltaryz.com {
         pull_args --force
         then sh /srv/blog.deltaryz.com/update.sh
     }
-
-
 }
 
 # pvfm.deltaryz.com (PVFM App)
