@@ -9,10 +9,15 @@ deltaryz.com {
 
     git {
         repo https://github.com/deltaryz/deltaryz.com
-	branch main
-	interval 1200
-	clone_args --depth 1
-	pull_args --force
+        branch main
+        interval 1200
+        clone_args --depth 1
+        pull_args --force
+    }
+
+    proxy /yt-next localhost:3000 {
+        transparent
+        websocket
     }
 }
 
@@ -25,12 +30,14 @@ blog.deltaryz.com {
 
     git {
         repo https://github.com/deltaryz/blog
-	branch main
-	interval 1200
-	clone_args --depth 1
-	pull_args --force
-	then sh /srv/blog.deltaryz.com/update.sh
+        branch main
+        interval 1200
+        clone_args --depth 1
+        pull_args --force
+        then sh /srv/blog.deltaryz.com/update.sh
     }
+
+
 }
 
 # pvfm.deltaryz.com (PVFM App)
@@ -114,7 +121,7 @@ watch.deltaryz.com {
     # running on atybox
     proxy / http://100.103.147.17:8096 {
         transparent
-	websocket
+        websocket
     }
 }
 
@@ -126,7 +133,7 @@ share.deltaryz.com {
     # running on unraid
     proxy / http://100.83.141.4:11169 {
         header_upstream Host "share.deltaryz.com"
-	header_upstream X-Forwarded-Proto "https"
+        header_upstream X-Forwarded-Proto "https"
     }
 }
 
@@ -171,10 +178,10 @@ pegasausage.deltaryz.com {
 
     git {
         repo https://github.com/deltaryz/pegasausage
-	branch master
-	interval 1200
-	clone_args --depth 1
-	pull_args --force
+        branch master
+        interval 1200
+        clone_args --depth 1
+        pull_args --force
     }
 }
 
