@@ -3,12 +3,15 @@
 
 import express from "express";
 import fetch from "node-fetch";
+import cors from "cors";
 
 console.log("Stream update checker now starting...");
 
 const app = express();
 const API_KEY = process.env.YT_API_KEY;
 const CHANNEL_ID = "UCcDlMox2LUcBJ6LiEqSZcBg";
+
+app.use(cors());
 
 let cachedVideoId = null;
 let lastUpdate = null;
@@ -34,6 +37,8 @@ async function queryYouTube(eventType) {
 async function refreshCache() {
     console.log("Refreshing...");
     try {
+        let vid = null;
+
         // 1. Check if there is a currently live stream
         vid = await queryYouTube("live");
 
