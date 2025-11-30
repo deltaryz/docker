@@ -39,15 +39,16 @@ services:
   # Server for horsepower.deltaryz.com
   horsepower:
     image: python:3.12-slim
+    restart: always
     container_name: horsepower
     ports:
       - "7499:7499"
     volumes:
       - "./horsepower:/app"
-    entrypoint: ["python3", "/app/serve.py", "-p", "7499", "-r", ".", "-n"]
+    entrypoint: [ "python3", "/app/serve.py", "-p", "7499", "-r", ".", "-n" ]
     #command: python3 /app/serve.py -p 7495 -r . -n
 
-  # Server for goty2 multiplayer dungeon
+    # Server for goty2 multiplayer dungeon
   goty2:
     build:
       context: .
@@ -59,6 +60,19 @@ services:
     volumes:
       - "/home/delta/web/goty2.floof.zon:/srv"
 
+  # Deltamix youtube stream checker
+  stream-update:
+    build:
+      context: ./stream-update
+      dockerfile: Dockerfile
+    container_name: stream-update
+    environment:
+      - YT_API_KEY=${YT_API_KEY}
+    ports:
+      - "3000:3000"
+    restart: always
+
 volumes:
   caddy_data:
-        
+
+
