@@ -15,7 +15,7 @@ deltaryz.com {
         pull_args --force
     }
 
-    proxy /yt-next localhost:3001 {
+    proxy /yt-next http://stream-update:3001 {
         transparent
         websocket
     }
