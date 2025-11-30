@@ -62,4 +62,6 @@ app.get("/yt-next", (req, res) => {
     });
 });
 
-app.listen(3000);
+app.listen(3000, '0.0.0.0', () => {
+    console.log('Node service listening on port 3000');
+});
