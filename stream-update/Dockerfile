@@ -13,7 +13,7 @@ RUN npm install --production
 COPY stream-update.js ./
 
 # Expose port
-EXPOSE 3000
+EXPOSE 3001
 
 # Run the script
 CMD ["node", "stream-update.js"]
