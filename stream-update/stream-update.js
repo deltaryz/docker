@@ -13,7 +13,7 @@ const CHANNEL_ID = "UCcDlMox2LUcBJ6LiEqSZcBg";
 let cachedVideoId = null;
 let lastUpdate = null;
 
-// Generic helper for YouTube search
+// do youtube api query
 async function queryYouTube(eventType) {
     const url =
         "https://www.googleapis.com/youtube/v3/search" +
@@ -34,10 +34,13 @@ async function queryYouTube(eventType) {
 async function refreshCache() {
     console.log("Refreshing...");
     try {
-        // 1. Next scheduled livestream
-        let vid = await queryYouTube("upcoming");
+        // 1. Check if there is a currently live stream
+        vid = await queryYouTube("live");
 
-        // 2. Fallback: most recent completed livestream
+        // 2. If none, check for the next scheduled livestream
+        if (!vid) vid = await queryYouTube("upcoming");
+
+        // 3. most recent completed livestream
         if (!vid) vid = await queryYouTube("completed");
 
         cachedVideoId = vid || null;
