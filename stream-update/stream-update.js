@@ -60,8 +60,8 @@ async function refreshCache() {
 // Startup refresh
 await refreshCache();
 
-// Refresh every 30 minutes
-setInterval(refreshCache, 30 * 60 * 1000);
+// Refresh every 6 hours
+setInterval(refreshCache, 6 * 60 * 60 * 1000); // 21,600,000 ms
 
 app.get("/yt-next", (req, res) => {
     res.json({
