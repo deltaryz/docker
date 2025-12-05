@@ -112,7 +112,7 @@ listen.deltaryz.com {
 }
 
 # Jellyfin (video/media server)
-watch.deltaryz.com {
+paws-on.me, watch.deltaryz.com {
     tls mail@deltaryz.com
     gzip
 
