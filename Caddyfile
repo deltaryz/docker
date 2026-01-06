@@ -89,6 +89,22 @@ eevee.email {
     gzip
 }
 
+# nobadne.ws
+# This won't work unless the nobadne.ws folder is owned by root:root
+nobadne.ws {
+    tls mail@deltaryz.com
+    root /srv/nobadne.ws
+    gzip
+
+    git {
+        repo https://github.com/dotskysoftworks/nobadnews
+	branch main
+	interval 1200
+	clone_args --depth 1
+	pull_args --force
+    }
+}
+
 
 
 ### PROXIES
@@ -140,7 +156,7 @@ map.floof.zone {
     tls delta@floof.zone
     gzip 
 
-    proxy / http://100.103.147.17:8100 {
+    proxy / http://100.111.32.61:8100 {
         without /
         transparent
     }
