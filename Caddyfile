@@ -73,6 +73,10 @@ floof.zone {
     proxy /files/ http://100.111.32.61:5678 {
         without /files
     }
+
+    proxy /gb http://100.103.147.17:5999 {
+        without /gb
+    }
 }
 
 # horsecock.party (seizure warning)
@@ -128,7 +132,7 @@ listen.deltaryz.com {
 }
 
 # Jellyfin (video/media server)
-paws-on.me, watch.deltaryz.com {
+watch.deltaryz.com {
     tls mail@deltaryz.com
     gzip
 
