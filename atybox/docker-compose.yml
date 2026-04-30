@@ -56,25 +56,17 @@ services:
     stdin_open: true
     tty: true
 
-  # # PS2 SMB for OPL
-  # samba:
-  #   restart: always
-  #   container_name: ps2smb
-  #   tty: true
-  #   hostname: Docker
-  #   build:
-  #     context: .
-  #     shm_size: '100mb'
-  #     dockerfile: ps2smb-Dockerfile
-  #   volumes:
-  #     - "/home/share/ps2smb/OPL:/mnt/ps2smb"
-  #     - "./ps2smb.conf:/etc/samba/smb.conf"
-  #   ports:
-  #     - "450:445/tcp" # DONT FORGET THIS
-
-  # TODO: ps3netsrv
-  # TODO: mc server/purpur/java
-  # TODO: bedrockwormhole
+  # PS3netsrv
+  ps3netsrv:
+    image: debian:bookworm-slim
+    container_name: ps3netsrv
+    volumes:
+      - /home/share/ps3netsrv:/data:ro
+    working_dir: /data
+    ports:
+      - "38008:38008"
+    command: /data/ps3netsrv_linuxX86_64
+    restart: always
 
   # Gluetun VPN (Mullvad)
   vpn:
