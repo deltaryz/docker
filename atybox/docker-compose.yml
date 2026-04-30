@@ -1,3 +1,6 @@
+# ./.env file is required for gluetun to function
+# ./Caddyfile is required for caddy to function
+
 services:
 
   # Caddy webserver
