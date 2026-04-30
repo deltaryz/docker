@@ -83,7 +83,7 @@ services:
     environment:
       - VPN_SERVICE_PROVIDER=mullvad
       - VPN_TYPE=wireguard
-      - WIREGUARD_PRIVATE_KEY=IO9tR/x599OTCzyANuiIn72VBvHaG9dZVsxzWZJx8VU= # TODO: move this to .env (so i can put this in github maybe)
+      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY} # ./.env
       - WIREGUARD_ADDRESSES=10.72.88.137/32
       - SERVER_CITIES=Stockholm
       - DNS_ADDRESS=1.1.1.1
