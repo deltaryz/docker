@@ -148,8 +148,8 @@ share.deltaryz.com {
     tls mail@deltaryz.com
     gzip
 
-    # running on unraid
-    proxy / http://100.83.141.4:11169 {
+    # running on atybox
+    proxy / http://100.111.32.61:8734 {
         header_upstream Host "share.deltaryz.com"
         header_upstream X-Forwarded-Proto "https"
     }
