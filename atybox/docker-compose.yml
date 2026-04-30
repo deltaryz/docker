@@ -54,6 +54,19 @@ services:
     mem_limit: 10g
     restart: unless-stopped
 
+  # transfer.sh file sharing
+  transfer:
+    image: dutchcoders/transfer.sh:latest
+    container_name: transfer
+    restart: always
+    command: --provider local --basedir /data --purge-days 7 --purge-interval 1
+    volumes:
+      - ./transfer:/data
+    ports:
+      - "8734:8080"
+    environment:
+      - BASEDIR=/data
+
   # PS3netsrv
   ps3netsrv:
     image: debian:bookworm-slim
