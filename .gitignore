@@ -15,6 +15,7 @@ node_modules/
 package-lock.json
 nzbget_config/
 deluge_config/
+gluetun_config/
 .DS_Store
 ._DS_Store
 

@@ -84,9 +84,12 @@ services:
       - VPN_SERVICE_PROVIDER=mullvad
       - VPN_TYPE=wireguard
       - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY} # ./.env
-      - WIREGUARD_ADDRESSES=10.72.88.137/32
+      - WIREGUARD_ADDRESSES=${WIREGUARD_ADDRESSES}
+      - UPDATER_PERIOD=12h
       - SERVER_CITIES=Stockholm
       - DNS_ADDRESS=1.1.1.1
+    volumes:
+      - "./gluetun_config:/gluetun"
     ports:
       - "6789:6789"      # NZBget Web UI
       - "8112:8112"      # Deluge Web UI
@@ -106,8 +109,6 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=America/Los_Angeles
-      - NZBGET_USER=nzbget #optional
-      - NZBGET_PASS=Poopinator3427 #optional
     volumes:
       - ./nzbget_config:/config
       - /home/share/nzbget:/downloads
