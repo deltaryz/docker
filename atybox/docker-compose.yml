@@ -41,7 +41,7 @@ services:
 
   # gayrealm (minecraft server)
   gayrealm:
-    image: eclipse-temurin:21-jdk
+    image: eclipse-temurin:25-jdk
     container_name: gayrealm
     working_dir: /server
     volumes:
@@ -49,6 +49,7 @@ services:
     ports:
       - "25565:25565"
       - "19132:19132/udp"
+      - "8100:8100" # BlueMap
     command: /server/start.sh
     mem_limit: 10g
     restart: unless-stopped
