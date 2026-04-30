@@ -56,8 +56,18 @@ services:
       -jar /server/velocity-*.jar"
     mem_limit: 2g
     restart: unless-stopped
-    stdin_open: true
-    tty: true
+
+  # rasync (retroarch sync system)
+  rasync:
+    image: python:3.12-slim
+    container_name: retroarchsync
+    volumes:
+      - /home/delta/retroarchsync:/app
+    working_dir: /app
+    ports:
+      - "8769:8769"
+    command: bash -c "pip install flask -q && python rasync.py"
+    restart: always
 
   # Server for horsepower.deltaryz.com
   horsepower:

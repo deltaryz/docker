@@ -52,8 +52,6 @@ services:
     command: /server/start.sh
     mem_limit: 10g
     restart: unless-stopped
-    stdin_open: true
-    tty: true
 
   # # PS2 SMB for OPL
   # samba:
