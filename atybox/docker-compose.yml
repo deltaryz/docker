@@ -1,0 +1,135 @@
+services:
+
+  # Caddy webserver
+  caddy:
+    image: abiosoft/caddy:no-stats
+    container_name: caddy
+    restart: always
+    environment:
+      - ACME_AGREE=true
+    ports:
+      - "4567:4567"
+      - "5678:5678"
+    volumes:
+      - "./Caddyfile:/etc/Caddyfile"
+      - "caddy_data:/root/.caddy"
+      - "/home/delta/∆•MIX:/srv"
+      - "/home/delta/doritoshare:/doritoshare"
+
+  # Navidrome Music Server (Subsonic API)
+  navidrome:
+    image: deluan/navidrome:0.51.1
+    container_name: navidrome
+    ports:
+      - "4533:4533"
+    volumes:
+      - /home/delta/navidrome:/data
+      - /home/share/doritomusic:/music:ro
+    environment:
+      ND_SCANSCHEDULE: 1m
+      ND_LOGLEVEL: info
+      ND_SESSIONTIMEOUT: 24h
+      ND_IMAGECACHESIZE: 10000MB
+      ND_COVERARTPRIORITY: "embedded, cover.*"
+      ND_ENABLECOVERANIMATION: "false"
+      ND_ENABLEEXTERNALSERVICES: "false"
+      ND_ENABLESHARING: "true"
+    restart: always
+
+  # gayrealm (minecraft server)
+  gayrealm:
+    image: eclipse-temurin:21-jdk
+    container_name: gayrealm
+    working_dir: /server
+    volumes:
+      - /home/delta/minecraft/gayrealm:/server
+    ports:
+      - "25565:25565"
+      - "19132:19132/udp"
+    command: /server/start.sh
+    mem_limit: 10g
+    restart: unless-stopped
+    stdin_open: true
+    tty: true
+
+  # # PS2 SMB for OPL
+  # samba:
+  #   restart: always
+  #   container_name: ps2smb
+  #   tty: true
+  #   hostname: Docker
+  #   build:
+  #     context: .
+  #     shm_size: '100mb'
+  #     dockerfile: ps2smb-Dockerfile
+  #   volumes:
+  #     - "/home/share/ps2smb/OPL:/mnt/ps2smb"
+  #     - "./ps2smb.conf:/etc/samba/smb.conf"
+  #   ports:
+  #     - "450:445/tcp" # DONT FORGET THIS
+
+  # TODO: ps3netsrv
+  # TODO: mc server/purpur/java
+  # TODO: bedrockwormhole
+
+  # Gluetun VPN (Mullvad)
+  vpn:
+    image: qmcgaw/gluetun:latest
+    container_name: vpn
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      - VPN_SERVICE_PROVIDER=mullvad
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY=IO9tR/x599OTCzyANuiIn72VBvHaG9dZVsxzWZJx8VU= # TODO: move this to .env (so i can put this in github maybe)
+      - WIREGUARD_ADDRESSES=10.72.88.137/32
+      - SERVER_CITIES=Stockholm
+      - DNS_ADDRESS=1.1.1.1
+    ports:
+      - "6789:6789"      # NZBget Web UI
+      - "8112:8112"      # Deluge Web UI
+      - "6881:6881"      # Deluge Inbound
+      - "6881:6881/udp"  # Deluge Inbound
+      - "58846:58846"    # deluged thin client
+    restart: always
+
+  # NZBGet
+  nzbget:
+    image: linuxserver/nzbget
+    container_name: nzbget
+    depends_on:
+      - vpn
+    network_mode: "service:vpn"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+      - NZBGET_USER=nzbget #optional
+      - NZBGET_PASS=Poopinator3427 #optional
+    volumes:
+      - ./nzbget_config:/config
+      - /home/share/nzbget:/downloads
+    restart: always
+
+  # Deluge torrent client
+  deluge: 
+    image: linuxserver/deluge:latest
+    container_name: deluge
+    depends_on:
+      - vpn
+    network_mode: "service:vpn"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+      - DELUGE_LOGLEVEL=error
+    volumes:
+      - /home/share/torrents:/downloads
+      - ./deluge_config:/config
+    restart: always
+
+volumes:
+  caddy_data:
+

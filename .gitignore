@@ -13,3 +13,9 @@ configstore/
 .env
 node_modules/
 package-lock.json
+nzbget_config/
+deluge_config/
+.DS_Store
+._DS_Store
+
+
