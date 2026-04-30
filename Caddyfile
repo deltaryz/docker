@@ -127,8 +127,8 @@ listen.deltaryz.com {
     tls mail@deltaryz.com
     gzip
 
-    # running on unraid
-    proxy / http://100.83.141.4:4533
+    # running on atybox (moved from unraid 2026-04-29)
+    proxy / http://100.111.32.61:4533
 }
 
 # Jellyfin (video/media server)
