@@ -1,5 +1,6 @@
 # ./.env file is required for gluetun to function
 # ./Caddyfile is required for caddy to function
+# MINIMAX_API_KEY must be set in .env for the opencode service
 
 services:
 
@@ -40,9 +41,9 @@ services:
     restart: always
 
   # gayrealm (minecraft server)
-  gayrealm:
+  minecraft:
     image: eclipse-temurin:25-jdk
-    container_name: gayrealm
+    container_name: minecraft
     working_dir: /server
     volumes:
       - /home/delta/minecraft/gayrealm:/server
@@ -53,6 +54,28 @@ services:
     command: /server/start.sh
     mem_limit: 10g
     restart: unless-stopped
+    networks:
+      - default
+      - mc-internal
+
+  # OpenCode AI sidecar (opencode 1.14.33)
+  opencode:
+    image: oven/bun:alpine
+    container_name: opencode
+    user: root
+    working_dir: /workspace
+    volumes:
+      - /home/delta/minecraft/gayrealm/opencode-bin:/workspace
+      - /home/delta/minecraft/gayrealm:/server:ro
+      - /home/delta/minecraft/gayrealm/opencode-config:/root/.config/opencode
+    environment:
+      - MINIMAX_API_KEY=${MINIMAX_API_KEY}
+      - OPENCODE_ENABLE_EXA=1
+    entrypoint: ["/workspace/start.sh"]
+    restart: unless-stopped
+    networks:
+      - default
+      - mc-internal
 
   # transfer.sh file sharing
   transfer:
@@ -122,7 +145,7 @@ services:
     restart: always
 
   # Deluge torrent client
-  deluge: 
+  deluge:
     image: linuxserver/deluge:latest
     container_name: deluge
     depends_on:
@@ -138,6 +161,10 @@ services:
       - ./deluge_config:/config
     restart: always
 
+networks:
+  mc-internal:
+    # Internal network for minecraft <-> opencode communication
+    internal: true
+
 volumes:
   caddy_data:
-
