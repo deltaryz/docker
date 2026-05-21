@@ -187,3 +187,4 @@ networks:
 
 volumes:
   caddy_data:
+  open-webui:
