@@ -166,6 +166,17 @@ map.floof.zone {
     }
 }
 
+# rub.paws-on.me (Open WebUI - local AI chat)
+rub.paws-on.me {
+    tls mail@deltaryz.com
+    gzip
+
+    proxy / http://open-webui:8080 {
+        transparent
+        websocket
+    }
+}
+
 
 
 ### REDIRECTS
