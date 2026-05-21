@@ -59,6 +59,22 @@ services:
       - default
       - mc-internal
 
+  # black ops 2 server
+  blops2:
+    image: scottyhardy/docker-wine:latest
+    container_name: blops2
+    restart: unless-stopped
+    environment:
+      - WINEDEBUG=-all
+      - DISPLAY=
+    volumes:
+      - /home/delta/blackops2/T6:/home/wineuser/.wine/drive_c/gameserver/T6
+      - /home/delta/blackops2/appdata:/home/wineuser/.wine/drive_c/users/wineuser/AppData/Local/Plutonium
+    working_dir: /home/wineuser/.wine/drive_c/gameserver/T6
+    command: >
+      wine cmd.exe /C !start_mp_server.bat
+    network_mode: host
+
   # OpenCode AI sidecar (opencode 1.14.33)
   opencode:
     image: oven/bun:alpine
@@ -140,8 +156,8 @@ services:
       - PUID=1000
       - PGID=1000
       - TZ=America/Los_Angeles
-      - NZBGET_USER=${NZBGET_USER} #optional
-      - NZBGET_PASS=${NZBGET_PASS} #optional
+      - NZBGET_USER=${NZBGET_USER}
+      - NZBGET_PASS=${NZBGET_PASS}
     volumes:
       - ./nzbget_config:/config
       - /home/share/nzbget:/downloads
