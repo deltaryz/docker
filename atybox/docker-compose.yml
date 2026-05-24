@@ -182,8 +182,6 @@ services:
 
   # Open WebUI - LM Studio frontend
   open-webui:
-    networks:
-      - dockernet
     image: ghcr.io/open-webui/open-webui:main
     container_name: open-webui
     restart: always
