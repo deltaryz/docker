@@ -171,7 +171,7 @@ rub.paws-on.me {
     tls mail@deltaryz.com
     gzip
 
-    proxy / http://open-webui:8080 {
+    proxy / http://100.111.32.61:3069 {
         transparent
         websocket
     }

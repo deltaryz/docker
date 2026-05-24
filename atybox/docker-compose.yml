@@ -180,6 +180,21 @@ services:
       - ./deluge_config:/config
     restart: always
 
+  # Open WebUI - LM Studio frontend
+  open-webui:
+    networks:
+      - dockernet
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    restart: always
+    environment:
+      - OPENAI_API_KEY=lmstudio
+      - OPENAI_API_BASE_URL=http://100.78.203.14:1234/v1
+    ports:
+      - "3069:8080"
+    volumes:
+      - ./open-webui:/app/backend/data
+
 networks:
   mc-internal:
     # Internal network for minecraft <-> opencode communication
