@@ -65,7 +65,7 @@ services:
       - /home/delta/retroarchsync:/app
     working_dir: /app
     ports:
-      - "8769:8769"
+      - "100.103.133.29:8769:8769"
     command: bash -c "pip install flask -q && python rasync.py"
     restart: always
 
