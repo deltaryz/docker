@@ -41,7 +41,7 @@ services:
   # Velocity proxy for floof.zone Minecraft server
   # (Runs on atybox)
   velocity:
-    image: eclipse-temurin:21-jre
+    image: eclipse-temurin:26-jre-ubi10-minimal
     container_name: velocity
     working_dir: /server
     volumes:
