@@ -59,25 +59,27 @@ services:
       - default
       - mc-internal
 
-  # black ops 2 server
-  blops2:
-    image: scottyhardy/docker-wine:latest
-    container_name: blops2
-    restart: unless-stopped
-    environment:
-      - WINEDEBUG=-all
-      - DISPLAY=
-    volumes:
-      - /home/delta/blackops2/T6:/home/wineuser/.wine/drive_c/gameserver/T6
-      - /home/delta/blackops2/appdata:/home/wineuser/.wine/drive_c/users/wineuser/AppData/Local/Plutonium
-    working_dir: /home/wineuser/.wine/drive_c/gameserver/T6
-    command: >
-      wine cmd.exe /C !start_mp_server.bat
-    network_mode: host
+  # # black ops 2 server
+  # blops2:
+  #   image: scottyhardy/docker-wine:latest
+  #   container_name: blops2
+  #   restart: unless-stopped
+  #   environment:
+  #     - WINEDEBUG=-all
+  #     - DISPLAY=
+  #   volumes:
+  #     - /home/delta/blackops2/T6:/home/wineuser/.wine/drive_c/gameserver/T6
+  #     - /home/delta/blackops2/appdata:/home/wineuser/.wine/drive_c/users/wineuser/AppData/Local/Plutonium
+  #   working_dir: /home/wineuser/.wine/drive_c/gameserver/T6
+  #   command: >
+  #     wine cmd.exe /C !start_mp_server.bat
+  #   network_mode: host
 
   # OpenCode AI sidecar (opencode 1.14.33)
   opencode:
-    image: oven/bun:alpine
+    build:
+        context: /home/delta/minecraft/gayrealm/opencode-bin
+        dockerfile: Dockerfile
     container_name: opencode
     user: root
     working_dir: /workspace
@@ -88,6 +90,9 @@ services:
     environment:
       - MINIMAX_API_KEY=${MINIMAX_API_KEY}
       - OPENCODE_ENABLE_EXA=1
+      - HTTP_PROXY=http://vpn:8888
+      - HTTPS_PROXY=http://vpn:8888
+      - NO_PROXY=minecraft,localhost,127.0.0.1
     entrypoint: ["/workspace/start.sh"]
     restart: unless-stopped
     networks:
@@ -135,6 +140,7 @@ services:
       - UPDATER_PERIOD=12h
       - SERVER_CITIES=Stockholm
       - DNS_ADDRESS=1.1.1.1
+      - HTTPPROXY=on
     volumes:
       - "./gluetun_config:/gluetun"
     ports:
@@ -187,11 +193,27 @@ services:
     restart: always
     environment:
       - OPENAI_API_KEY=lmstudio
-      - OPENAI_API_BASE_URL=http://100.78.203.14:1234/v1
+      - OPENAI_API_BASE_URL=http://192.168.69.132:1234/v1
     ports:
       - "3069:8080"
     volumes:
       - ./open-webui:/app/backend/data
+
+  # Soulseek Web UI
+  slskd:
+    image: slskd/slskd:latest
+    container_name: slskd
+    restart: unless-stopped
+    ports:
+      - "5030:5030"
+      - "50300:50300"
+    environment:
+      - SLSKD_REMOTE_CONFIGURATION=true
+    volumes:
+      - ./slskd-data:/app
+      - /home/share/doritomusic:/music:ro
+      - /home/share/ROMs:/roms:ro
+    user: "1000:1000"
 
 networks:
   mc-internal:
