@@ -99,6 +99,24 @@ services:
       - default
       - mc-internal
 
+  # Wendy's persistent workbench -- full RW on the gayrealm server folder, RCON
+  # admin access to the running server, ssh-only (key auth, no passwords).
+  wendy-workbench:
+    build:
+      context: /home/delta/minecraft/gayrealm/wendy-workbench
+      dockerfile: Dockerfile
+    container_name: wendy-workbench
+    volumes:
+      - /home/delta/minecraft/gayrealm:/server
+      - /home/delta/discordai-mvp:/discordai
+      - wendy_home:/persistent
+    ports:
+      - "16690:22"
+    networks:
+      - default
+      - mc-internal
+    restart: unless-stopped
+
   # transfer.sh file sharing
   transfer:
     image: dutchcoders/transfer.sh:latest
@@ -223,3 +241,4 @@ networks:
 volumes:
   caddy_data:
   open-webui:
+  wendy_home:
