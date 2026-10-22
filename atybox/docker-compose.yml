@@ -52,7 +52,9 @@ services:
       - "19132:19132/udp"
       - "8100:8100" # BlueMap
     command: /server/start.sh
-    mem_limit: 10g
+    # 16g: start.sh runs a 12G heap (-Xms12000M -Xmx12000M, AlwaysPreTouch). At 10g the heap didn't
+    # fit, ~3GB of it went to swap, and startup took 23-34 min instead of ~50s (2026-09-28).
+    mem_limit: 16g
     restart: always
     stop_grace_period: 60s
     networks:
@@ -85,7 +87,7 @@ services:
     working_dir: /workspace
     volumes:
       - /home/delta/minecraft/gayrealm/opencode-bin:/workspace
-      - /home/delta/minecraft/gayrealm:/server:ro
+      - /home/delta/minecraft/gayrealm:/server
       - /home/delta/minecraft/gayrealm/opencode-config:/root/.config/opencode
     environment:
       - MINIMAX_API_KEY=${MINIMAX_API_KEY}
@@ -108,7 +110,7 @@ services:
     container_name: wendy-workbench
     volumes:
       - /home/delta/minecraft/gayrealm:/server
-      - /home/delta/discordai-mvp:/discordai
+      - /home/delta/quadruped:/quadruped
       - wendy_home:/persistent
     ports:
       - "16690:22"
@@ -159,14 +161,11 @@ services:
       - SERVER_CITIES=Stockholm
       - DNS_ADDRESS=1.1.1.1
       - HTTPPROXY=on
+      - HEALTH_SMALL_CHECK_TYPE=dns
     volumes:
       - "./gluetun_config:/gluetun"
     ports:
       - "6789:6789"      # NZBget Web UI
-      - "8112:8112"      # Deluge Web UI
-      - "6881:6881"      # Deluge Inbound
-      - "6881:6881/udp"  # Deluge Inbound
-      - "58846:58846"    # deluged thin client
     restart: always
 
   # NZBGet
@@ -187,22 +186,10 @@ services:
       - /home/share/nzbget:/downloads
     restart: always
 
-  # Deluge torrent client
-  deluge:
-    image: linuxserver/deluge:latest
-    container_name: deluge
-    depends_on:
-      - vpn
-    network_mode: "service:vpn"
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=America/Los_Angeles
-      - DELUGE_LOGLEVEL=error
-    volumes:
-      - /home/share/torrents:/downloads
-      - ./deluge_config:/config
-    restart: always
+  # No torrent client on this box any more. qBittorrent ran here 2026-10-04..2026-10-22 and was
+  # removed; deluge before it. The surviving torrent client is doritobox's (/home/midnight/docker),
+  # so /home/share/torrents under gluetun has nothing writing to it now except nzbget's neighbour
+  # share. ./deluge_config and ./qbittorrent_config are gone or gitignored; nothing here is a client.
 
   # Open WebUI - LM Studio frontend
   open-webui:
@@ -231,6 +218,7 @@ services:
       - ./slskd-data:/app
       - /home/share/doritomusic:/music:ro
       - /home/share/ROMs:/roms:ro
+      - roms-big:/roms-big:ro
     user: "1000:1000"
 
 networks:
@@ -242,3 +230,13 @@ volumes:
   caddy_data:
   open-webui:
   wendy_home:
+  # doritobox array ROMs, mounted straight from NFS inside the container.
+  # A host bind mount will NOT work: docker is the snap package and its
+  # private mount namespace cannot see the host autofs/NFS mount at
+  # /doritobox (the bind resolves to an empty dir). 2026-09-29
+  roms-big:
+    driver: local
+    driver_opts:
+      type: nfs
+      o: "addr=192.168.69.69,rw,nfsvers=4.2,hard,noatime"
+      device: ":/mnt/array/roms (big)"
