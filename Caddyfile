@@ -176,6 +176,29 @@ rub.paws-on.me {
     }
 }
 
+# paws-on.me + sniff.paws-on.me (discordai-mvp -- AI services + sniff debug viewer)
+# both proxy to the SAME atybox caddy over tailscale, on plain http -- atybox's own
+# caddy virtual-hosts by the Host header, so both blocks point at the same ip:port
+# and "transparent" makes sure the original Host header actually reaches it.
+
+paws-on.me {
+    tls mail@deltaryz.com
+
+    proxy / http://100.111.32.61:80 {
+        transparent
+        websocket
+    }
+}
+
+sniff.paws-on.me {
+    tls mail@deltaryz.com
+
+    proxy / http://100.111.32.61:80 {
+        transparent
+        websocket
+    }
+}
+
 
 
 ### REDIRECTS
