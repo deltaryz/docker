@@ -170,7 +170,7 @@ map.floof.zone {
 rub.paws-on.me {
     tls mail@deltaryz.com
 
-    proxy / http://100.111.32.61:3069 {
+    proxy / http://100.118.149.5:3069 {
         transparent
         websocket
     }
