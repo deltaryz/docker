@@ -1,0 +1,20 @@
+#!/bin/sh
+# Refuse placeholder commit identities. The author and committer must name the
+# model that actually wrote the commit, so history stays honest and greppable.
+# Bypass only with --no-verify, deliberately.
+set -eu
+banned="deepseek-flash agent ai bot assistant unknown model opencode chatgpt claude"
+refuse() {
+    printf 'pre-commit: refusing identity "%s"\n' "$1" >&2
+    printf 'commit as the model that wrote it, e.g.\n' >&2
+    printf '  git -c user.name=deepseek-v4.1-flash -c user.email=agent@local commit ...\n' >&2
+    exit 1
+}
+for ident in "$(git var GIT_AUTHOR_IDENT)" "$(git var GIT_COMMITTER_IDENT)"; do
+    name=${ident%% <*}
+    norm=$(printf '%s' "$name" | tr '[:upper:]' '[:lower:]')
+    case " $banned " in
+        *" $norm "*) refuse "$name" ;;
+    esac
+done
+exit 0
