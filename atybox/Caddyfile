@@ -1,0 +1,9 @@
+100.111.32.61:4567 {
+    root /srv
+    browse /
+}
+
+100.111.32.61:5678 {
+    root /doritoshare
+    browse /
+}
