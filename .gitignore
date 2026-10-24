@@ -28,3 +28,9 @@ slskd-data/
 *.log
 *.bak
 *.bak-*
+*.swp
+*.swo
+*~
+*.orig
+*.rej
+.env.*
