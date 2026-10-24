@@ -80,6 +80,21 @@ services:
       - default
       - mc-internal
 
+  # Open WebUI -- proxied publicly at rub.paws-on.me via doritosrv's caddy.
+  # Data was moved from atybox's bind mount (2 users, 19 chats) to
+  # /home/delta/open-webui. The models run on doritomac over the LAN.
+  open-webui:
+    image: ghcr.io/open-webui/open-webui:main
+    container_name: open-webui
+    restart: always
+    environment:
+      - OPENAI_API_KEY=lmstudio
+      - OPENAI_API_BASE_URL=http://192.168.69.132:1234/v1
+    ports:
+      - "3069:8080"
+    volumes:
+      - /home/delta/open-webui:/app/backend/data
+
 networks:
   mc-internal:
     # Internal network for minecraft <-> opencode communication
