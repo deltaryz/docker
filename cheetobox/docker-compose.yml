@@ -21,10 +21,8 @@ services:
     environment:
       - TZ=America/Los_Angeles
       - BIND_PRIV=1
-      # Force controller to advertise only the correct IP:
       - UNIFI_HTTP_PORT=8080
       - UNIFI_HTTPS_PORT=8443
-      #- UNIFI_INFORM_HOST=192.168.69.222
 
     volumes:
       - /home/delta/unifi/data:/unifi/data
@@ -32,8 +30,7 @@ services:
       - /home/delta/unifi/run:/var/run/unifi
 
 
-  # Minecraft (Purpur) -- ported from atybox, server dir is the absolute path
-  # /home/delta/game/minecraft and is not moved or extracted into the image.
+  # Minecraft (Purpur) - runs `floof.zone` Minecraft server
   # mem_limit 6g per deltaryz; start.sh's heap is 4G. The JVM runs with
   # AlwaysPreTouch, so it commits the whole heap on start and sits around
   # 4.6 GiB inside a 6g cap. Heap 5G would put it at 93% with no headroom.
@@ -58,8 +55,6 @@ services:
   # OpenCode AI sidecar for the AIBridge plugin. AIBridge reaches it as
   # http://opencode:4200 (see plugins/AIBridge/config.yml), so the container
   # name matters and it has to be on the same internal network.
-  # atybox sent it out through vpn:8888; there is no vpn on this box, so the
-  # proxy vars are dropped and it uses the normal outbound route.
   opencode:
     build:
       context: /home/delta/game/minecraft/opencode-bin
@@ -80,9 +75,8 @@ services:
       - default
       - mc-internal
 
-  # Open WebUI -- proxied publicly at rub.paws-on.me via doritosrv's caddy.
-  # Data was moved from atybox's bind mount (2 users, 19 chats) to
-  # /home/delta/open-webui. The models run on doritomac over the LAN.
+  # Open WebUI - proxied publicly at rub.paws-on.me via doritosrv's caddy.
+  # Primarily used to access models running in LM Studio on doritomac
   open-webui:
     image: ghcr.io/open-webui/open-webui:main
     container_name: open-webui
