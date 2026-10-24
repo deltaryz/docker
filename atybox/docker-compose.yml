@@ -191,19 +191,6 @@ services:
   # so /home/share/torrents under gluetun has nothing writing to it now except nzbget's neighbour
   # share. ./deluge_config and ./qbittorrent_config are gone or gitignored; nothing here is a client.
 
-  # Open WebUI - LM Studio frontend
-  open-webui:
-    image: ghcr.io/open-webui/open-webui:main
-    container_name: open-webui
-    restart: always
-    environment:
-      - OPENAI_API_KEY=lmstudio
-      - OPENAI_API_BASE_URL=http://192.168.69.132:1234/v1
-    ports:
-      - "3069:8080"
-    volumes:
-      - ./open-webui:/app/backend/data
-
   # Soulseek Web UI
   slskd:
     image: slskd/slskd:latest
@@ -228,7 +215,6 @@ networks:
 
 volumes:
   caddy_data:
-  open-webui:
   wendy_home:
   # doritobox array ROMs, mounted straight from NFS inside the container.
   # A host bind mount will NOT work: docker is the snap package and its
