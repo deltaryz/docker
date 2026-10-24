@@ -53,13 +53,13 @@ services:
       - mc-internal
 
   # OpenCode AI sidecar for the AIBridge plugin. AIBridge reaches it as
-  # http://opencode:4200 (see plugins/AIBridge/config.yml), so the container
+  # http://minecraft-ai:4200 (see plugins/AIBridge/config.yml), so the container
   # name matters and it has to be on the same internal network.
   opencode:
     build:
       context: /home/delta/game/minecraft/opencode-bin
       dockerfile: Dockerfile
-    container_name: opencode
+    container_name: minecraft-ai
     user: root
     working_dir: /workspace
     volumes:
