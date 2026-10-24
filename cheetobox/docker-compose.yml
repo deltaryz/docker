@@ -31,3 +31,55 @@ services:
       - /home/delta/unifi/logs:/unifi/log
       - /home/delta/unifi/run:/var/run/unifi
 
+
+  # Minecraft (Purpur) -- ported from atybox, server dir is the absolute path
+  # /home/delta/game/minecraft and is not moved or extracted into the image.
+  # mem_limit 4g per deltaryz; start.sh's heap is set to 3G so the JVM fits
+  # inside it (it was 12G with a 16G container limit on atybox).
+  minecraft:
+    image: eclipse-temurin:25-jdk
+    container_name: minecraft
+    working_dir: /server
+    volumes:
+      - /home/delta/game/minecraft:/server
+    ports:
+      - "25565:25565"      # Java
+      - "19132:19132/udp"  # Bedrock (Geyser)
+      - "8100:8100"        # BlueMap
+    command: /server/start.sh
+    mem_limit: 4g
+    restart: always
+    stop_grace_period: 60s
+    networks:
+      - default
+      - mc-internal
+
+  # OpenCode AI sidecar for the AIBridge plugin. AIBridge reaches it as
+  # http://opencode:4200 (see plugins/AIBridge/config.yml), so the container
+  # name matters and it has to be on the same internal network.
+  # atybox sent it out through vpn:8888; there is no vpn on this box, so the
+  # proxy vars are dropped and it uses the normal outbound route.
+  opencode:
+    build:
+      context: /home/delta/game/minecraft/opencode-bin
+      dockerfile: Dockerfile
+    container_name: opencode
+    user: root
+    working_dir: /workspace
+    volumes:
+      - /home/delta/game/minecraft/opencode-bin:/workspace
+      - /home/delta/game/minecraft:/server
+      - /home/delta/game/minecraft/opencode-config:/root/.config/opencode
+    environment:
+      - MINIMAX_API_KEY=${MINIMAX_API_KEY}
+      - OPENCODE_ENABLE_EXA=1
+    entrypoint: ["/workspace/start.sh"]
+    restart: unless-stopped
+    networks:
+      - default
+      - mc-internal
+
+networks:
+  mc-internal:
+    # Internal network for minecraft <-> opencode communication
+    internal: true
