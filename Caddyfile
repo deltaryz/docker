@@ -160,7 +160,7 @@ map.floof.zone {
     tls delta@floof.zone
     gzip 
 
-    proxy / http://100.111.32.61:8100 {
+    proxy / http://100.118.149.5:8100 {
         without /
         transparent
     }
