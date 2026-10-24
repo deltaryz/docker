@@ -34,8 +34,9 @@ services:
 
   # Minecraft (Purpur) -- ported from atybox, server dir is the absolute path
   # /home/delta/game/minecraft and is not moved or extracted into the image.
-  # mem_limit 4g per deltaryz; start.sh's heap is set to 3G so the JVM fits
-  # inside it (it was 12G with a 16G container limit on atybox).
+  # mem_limit 6g per deltaryz; start.sh's heap is 4G. The JVM runs with
+  # AlwaysPreTouch, so it commits the whole heap on start and sits around
+  # 4.6 GiB inside a 6g cap. Heap 5G would put it at 93% with no headroom.
   minecraft:
     image: eclipse-temurin:25-jdk
     container_name: minecraft
@@ -47,7 +48,7 @@ services:
       - "19132:19132/udp"  # Bedrock (Geyser)
       - "8100:8100"        # BlueMap
     command: /server/start.sh
-    mem_limit: 4g
+    mem_limit: 6g
     restart: always
     stop_grace_period: 60s
     networks:
