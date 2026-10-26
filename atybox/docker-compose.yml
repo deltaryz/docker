@@ -160,6 +160,8 @@ services:
       - UPDATER_PERIOD=12h
       - SERVER_CITIES=Stockholm
       - DNS_ADDRESS=1.1.1.1
+      # lets the completion-listener script reach cheetobox on the LAN/tailnet; private ranges only
+      - FIREWALL_OUTBOUND_SUBNETS=192.168.69.0/24,100.64.0.0/10
       - HTTPPROXY=on
       - HEALTH_SMALL_CHECK_TYPE=dns
     volumes:
