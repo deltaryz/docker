@@ -67,6 +67,9 @@ services:
       - /home/delta/game/minecraft:/server
       - /home/delta/game/minecraft/opencode-config:/root/.config/opencode
     environment:
+      # The sidecar runs on DeepSeek (deltaryz, 2026-10-31): quadruped's key,
+      # same account the agent stack itself bills to.
+      - DEEPSEEK_API_KEY=${DEEPSEEK_API_KEY}
       - MINIMAX_API_KEY=${MINIMAX_API_KEY}
       - OPENCODE_ENABLE_EXA=1
     entrypoint: ["/workspace/start.sh"]
