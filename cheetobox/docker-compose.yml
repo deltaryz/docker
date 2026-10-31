@@ -100,7 +100,7 @@ services:
   # After encoders and playback verify, switch to jellyfin-txcap:12.3-rescap
   # (PROCEDURE.md §4.3) -- never to `latest`.
   jellyfin:
-    image: jellyfin/jellyfin:12.1
+    image: jellyfin-txcap:12.3-rescap
     container_name: jellyfin
     user: "1000:1000"
     network_mode: host
@@ -108,8 +108,16 @@ services:
       - video
       - 992
     volumes:
-      - /home/delta/jellyfin/config:/config
-      - /home/delta/jellyfin/cache:/cache
+      # /home/delta/jellyfin is doritobox's whole jellyfin CONFIG ROOT (it holds
+      # .jellyfin-data plus the nested config/, log/, metadata/, plugins/ and the
+      # 62 GB data/ tree), so it mounts at /config as a whole. Mounting its
+      # config/ subdir there instead puts the marker files a level out of place and
+      # the server refuses to start: "Expected to find only .jellyfin-data but
+      # found marker for /config/.jellyfin-config".
+      - /home/delta/jellyfin:/config
+      # cache stays outside that tree on purpose: a marker inside /config makes the
+      # same sanity check fail again.
+      - /home/delta/jellyfin-cache:/cache
       - /mnt/array/jellyfin/tv:/share/jellyfin/tv
       - /mnt/array/jellyfin/anime:/share/jellyfin/anime
       - /mnt/array/jellyfin/movies:/share/jellyfin/movies
