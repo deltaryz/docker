@@ -136,8 +136,8 @@ watch.deltaryz.com {
     tls mail@deltaryz.com
     gzip
 
-    # running on atybox
-    proxy / http://100.103.147.17:8096 {
+    # jellyfin moved with the array: doritobox -> cheetobox (2026-10-31)
+    proxy / http://100.118.149.5:8096 {
         transparent
         websocket
     }
