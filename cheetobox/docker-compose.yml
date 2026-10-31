@@ -89,6 +89,144 @@ services:
     volumes:
       - /home/delta/open-webui:/app/backend/data
 
+  # ---------------------------------------------------------------------
+  # Media stack, moved off doritobox with the array (2026-10-31).
+  # ---------------------------------------------------------------------
+
+  # Jellyfin. The image is PINNED to the 12.1 tag carried over from doritobox
+  # byte-for-byte rather than pulled: `jellyfin/jellyfin:latest` upstream moved
+  # past 12.1 in October 2026, and the whole point of the first boot is running
+  # the same version that produced the config backup, so nothing migrates.
+  # After encoders and playback verify, switch to jellyfin-txcap:12.3-rescap
+  # (PROCEDURE.md §4.3) -- never to `latest`.
+  jellyfin:
+    image: jellyfin/jellyfin:12.1
+    container_name: jellyfin
+    user: "1000:1000"
+    network_mode: host
+    group_add:
+      - video
+      - 992
+    volumes:
+      - /home/delta/jellyfin/config:/config
+      - /home/delta/jellyfin/cache:/cache
+      - /mnt/array/jellyfin/tv:/share/jellyfin/tv
+      - /mnt/array/jellyfin/anime:/share/jellyfin/anime
+      - /mnt/array/jellyfin/movies:/share/jellyfin/movies
+      - /mnt/array/jellyfin/youtube:/share/jellyfin/youtube
+    devices:
+      - /dev/dri:/dev/dri
+    restart: always
+
+  # Gluetun VPN (Mullvad, WireGuard, Stockholm). Uses ATYBOX's device key, not
+  # doritobox's: atybox's download stack is being retired, so its device slot
+  # and its key move here (deltaryz, 2026-10-31). Key/address live in ./.env.
+  vpn:
+    image: qmcgaw/gluetun:latest
+    container_name: vpn
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      - VPN_SERVICE_PROVIDER=mullvad
+      - VPN_TYPE=wireguard
+      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}   # ./.env
+      - WIREGUARD_ADDRESSES=${WIREGUARD_ADDRESSES}       # ./.env
+      - UPDATER_PERIOD=12h
+      - SERVER_CITIES=Stockholm
+      - DNS_ADDRESS=1.1.1.1
+      # let the namespace's containers reach the LAN: qBittorrent's search
+      # plugin has to talk to Jackett on this host at 192.168.69.222:9117.
+      # Private destinations only, never the internet, so no swarm leak.
+      - FIREWALL_OUTBOUND_SUBNETS=192.168.69.0/24
+      # the default icmp check never matches its own reply through the tunnel
+      # and pins gluetun unhealthy forever
+      - HEALTH_SMALL_CHECK_TYPE=dns
+    volumes:
+      - ./gluetun_config:/gluetun
+    ports:
+      - "8090:8090"   # qBittorrent Web UI (VueTorrent)
+      - "6767:6789"   # nzbget Web UI: host 6767 (6789 is unifi's) -> the
+                      # tunnel's own 6789, because nzbget's container healthcheck
+                      # and its s6 init both poll 6789 and would never see 6767
+    restart: always
+
+  # qBittorrent. 5.1.4 is pinned on purpose: 5.2.x hangs the WebUI at 100% CPU
+  # on GET /api/v2/search/plugins (upstream #24900). /downloads is the same
+  # container path as on doritobox against the same bytes, so torrents resume
+  # without a recheck; /staging is where copy-finished.sh drops verified copies.
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:5.1.4
+    container_name: qbittorrent
+    depends_on:
+      - vpn
+    network_mode: "service:vpn"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+      - WEBUI_PORT=8090
+      - TORRENTING_PORT=6990
+      - DOCKER_MODS=ghcr.io/vuetorrent/vuetorrent-lsio-mod:latest
+    volumes:
+      - /mnt/array/torrents:/downloads
+      - ./qbittorrent_config:/config
+      - /mnt/array/staging:/staging
+    restart: always
+
+  # Jackett on host networking: indexer search traffic never joins a swarm, and
+  # a residential IP passes Cloudflare more readily than a datacenter one.
+  # Requests it makes to qBittorrent's WebUI then arrive from a LAN address
+  # that WebUI\AuthSubnetWhitelist already trusts.
+  jackett:
+    image: lscr.io/linuxserver/jackett:latest
+    container_name: jackett
+    network_mode: host
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+    volumes:
+      - ./jackett_config:/config
+      - /mnt/array/torrents:/downloads
+    restart: always
+
+  # Byparr: the Cloudflare solver Jackett calls. Host networking because the
+  # clearance cookie is bound to the IP that solved the challenge; HOST=127.0.0.1
+  # keeps it off the LAN so it is not an open browser proxy.
+  byparr:
+    image: ghcr.io/thephaseless/byparr:latest
+    container_name: byparr
+    network_mode: host
+    environment:
+      - HOST=127.0.0.1
+      - TZ=America/Los_Angeles
+    shm_size: "1gb"
+    restart: always
+
+  # nzbget, inheriting atybox's responsibilities. It lands downloads in
+  # /mnt/array/staging/nzb (bound to /downloads), so MainDir and DestDir in
+  # nzbget.conf stay exactly as they are and only the bind moves. nzbget keeps
+  # listening on 6789 inside the tunnel; only the PUBLISHED host port differs
+  # (6767), which is why nothing in nzbget.conf had to change.
+  nzbget:
+    image: linuxserver/nzbget
+    container_name: nzbget
+    depends_on:
+      - vpn
+    network_mode: "service:vpn"
+    environment:
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Los_Angeles
+      - NZBGET_USER=${NZBGET_USER}
+      - NZBGET_PASS=${NZBGET_PASS}
+    volumes:
+      - ./nzbget_config:/config
+      - /mnt/array/staging/nzb:/downloads
+    restart: always
+
 networks:
   mc-internal:
     # Internal network for minecraft <-> opencode communication
