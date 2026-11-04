@@ -59,6 +59,13 @@ pvfm.deltaryz.com {
         clone_args --depth 1
         pull_args --force
     }
+
+    # metadata proxy: PVFM stopped sending Access-Control-Allow-Origin, so the
+    # app's two metadata calls come from /data/* on this host instead of
+    # ponyvillefm.com. Same origin, so CORS no longer applies. Streams and
+    # artwork stay direct -- plain <audio>/<img> loads were never gated.
+    # pvfm-proxy in docker-compose.yml
+    proxy /data/ http://pvfm-proxy:8080
 }
 
 

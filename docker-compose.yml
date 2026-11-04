@@ -112,6 +112,22 @@ services:
       - "3001:3001"
     restart: always
 
+  # pvfm metadata proxy -- PVFM dropped CORS on their metadata endpoints, so
+  # /data/* is served same-origin by this container instead of direct from
+  # ponyvillefm.com. Code in ./pvfm-proxy, reached only over dockernet by caddy.
+  pvfm-proxy:
+    networks:
+      - dockernet
+    image: python:3.12-slim
+    container_name: pvfm-proxy
+    restart: always
+    volumes:
+      - "./pvfm-proxy:/app:ro"
+    entrypoint: [ "python3", "-u", "/app/proxy.py" ]
+    environment:
+      - PORT=8080
+    mem_limit: 128m
+
 volumes:
   caddy_data:
 
