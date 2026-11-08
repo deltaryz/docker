@@ -265,3 +265,17 @@ horsepower.deltaryz.com {
         header_upstream Cross-Origin-Embedder-Policy "require-corp"
     }
 }
+
+# pupcircuit.floof.zone (Circuit's Navidrome)
+# The service container publishes 50420 on atybox; Navidrome runs with baseurl=/ so
+# no path rewriting is needed -- this is proxied at the root, unlike paws-on.me's
+# /api/ routes which strip their prefix.
+pupcircuit.floof.zone {
+    tls mail@deltaryz.com
+    gzip
+
+    proxy / http://100.111.32.61:50420 {
+        transparent
+        websocket
+    }
+}
