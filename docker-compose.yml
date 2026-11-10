@@ -9,6 +9,18 @@ services:
       dockerfile: Dockerfile-caddy
     # image: abiosoft/caddy:no-stats
     container_name: caddy
+    # Zero data retention (deltaryz, 2026-11-09): without this, EVERYTHING caddy
+    # prints is appended to /var/lib/docker/containers/<id>/<id>-json.log by the
+    # default json-file driver -- including error lines that carry client IPs
+    # ("TLS handshake error from <ip>", "No such site at :80 (Remote: <ip>)").
+    # ~400k lines / 60 MB had accumulated. "none" means docker keeps no copy at
+    # all; caddy still writes to its own stdout, it just isn't stored. Cost: no
+    # `docker logs caddy` for reading Caddyfile parse errors -- validate a config
+    # change in a throwaway container first (README-OPS if present, else:
+    #   docker run -d --network none -v ./Caddyfile:/etc/Caddyfile:ro docker-caddy \
+    #     --conf /etc/Caddyfile --agree=true  -> docker logs <id>)
+    logging:
+      driver: "none"
     restart: always
     environment:
       - ACME_AGREE=true
