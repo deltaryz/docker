@@ -208,6 +208,9 @@ class Handler(BaseHTTPRequestHandler):
         # endpoint is usable from anywhere (and from old cached app.js builds
         # that still hit absolute URLs via a custom host).
         self.send_header("Access-Control-Allow-Origin", "*")
+        # generous on purpose: the dev preview under the code-server path prefix
+        # (and anything else) can pull this cross-origin and read the proxy headers
+        self.send_header("Access-Control-Expose-Headers", "*")
         self.send_header("Cache-Control", "no-store")
         for key, value in (extra or {}).items():
             self.send_header(key, value)
@@ -219,7 +222,8 @@ class Handler(BaseHTTPRequestHandler):
         self.send_response(204)
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Access-Control-Allow-Methods", "GET, HEAD, OPTIONS")
-        self.send_header("Access-Control-Allow-Headers", "Accept, Content-Type")
+        self.send_header("Access-Control-Allow-Headers", "*")
+        self.send_header("Access-Control-Max-Age", "86400")
         self.send_header("Content-Length", "0")
         self.end_headers()
 
