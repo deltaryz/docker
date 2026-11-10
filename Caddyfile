@@ -92,12 +92,12 @@ pvfm.deltaryz.com {
 # The container publishes no host port, so this vhost is the only door.
 dev.paws-on.me {
     tls mail@deltaryz.com
-    # Credentials live in Caddyfile.local, which is gitignored -- this repo is
-    # public, and caddy 1.0.3's basicauth only accepts PLAINTEXT (a bcrypt hash
-    # is treated as the literal password and every login 401s), so keeping the
-    # line here would publish the password. Caddyfile.local.example is the shape;
-    # copy it to Caddyfile.local on any host that runs caddy.
-    import Caddyfile.local
+    # NO basicauth here on purpose. HTTP basic auth is a browser dialog, not a
+    # form: iOS Safari neither autofills nor saves it, and the WebSocket handshake
+    # re-prompts, which loops the workbench. The login lives in code-server
+    # itself instead (a real form, session cookie, saveable in the password
+    # manager). If basic auth is ever wanted back, it goes in Caddyfile.local --
+    # caddy 1.0.3 only accepts PLAINTEXT there, a bcrypt hash 401s always.
     proxy / http://code-server:8443 {
         websocket
         transparent

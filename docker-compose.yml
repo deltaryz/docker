@@ -182,9 +182,12 @@ services:
       - PGID=1002
       - TZ=America/Los_Angeles
       - DEFAULT_WORKSPACE=/code
-      # no PASSWORD/HASHED_PASSWORD on purpose: the linuxserver init reads their
-      # presence to decide --auth password. Absent = auth none = one prompt, at
-      # the caddy vhost.
+      # code-server's own login: a form, so iOS will save it, and a session cookie
+      # so the websocket does not have to re-authenticate on every reconnect.
+      # code-server is single-user -- there is no username to set.
+      # :? so a missing .env fails loudly instead of silently starting with no
+      # password at all (an empty PASSWORD makes the init script pick auth none)
+      - PASSWORD=${CODESERVER_PASSWORD:?set CODESERVER_PASSWORD in .env}
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
