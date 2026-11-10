@@ -144,13 +144,17 @@ services:
       - PORT=8080
     mem_limit: 128m
 
-  # Browser VS Code for the iPad (and any other browser). Two gates, both
-  # deliberate:
-  #   1. the port is published only on the tailnet IP, same as syncthing and
-  #      rasync -- nothing on the LAN or the internet can reach it;
-  #   2. a hashed password, because devious's machines are on this tailnet too
-  #      and this service is a shell on doritosrv, not a web page.
-  # The hash lives in .env (gitignored), never in this file.
+  # Browser VS Code for the iPad (and any other browser).
+  #
+  # Access control is the tailnet, by deltaryz's decision: the port is published
+  # only on the tailnet IP (same pattern as syncthing and rasync), so nothing on
+  # the LAN or the internet can reach it, and code-server runs with auth none --
+  # no login, no password to lose. Her call and a deliberate one: devious is on
+  # this tailnet and trusted, and "if anyone untrusted gets into my tailnet I have
+  # bigger problems". Note what that means in practice: tailnet access to this
+  # port is a shell on doritosrv as delta (see the ssh key below), and delta is in
+  # the docker group. To re-gate it later, set HASHED_PASSWORD (sha256 of a
+  # password) in .env and it picks up auth=password on the next recreate.
   #
   # It sees exactly ONE host path: /home/delta/dev. Note the mount point is
   # /code, not /dev -- a bind mount at /dev makes the whole container
@@ -172,7 +176,6 @@ services:
       - PUID=1002            # = delta on this host, so files in /code are his
       - PGID=1002
       - TZ=America/Los_Angeles
-      - HASHED_PASSWORD=${CODESERVER_HASHED_PASSWORD}
       - DEFAULT_WORKSPACE=/code
     ports:
       - "100.103.133.29:8443:8443"
