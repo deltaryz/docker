@@ -1,0 +1,2 @@
+# copy to Caddyfile.local (gitignored) on any host that runs caddy.
+basicauth / <user> <password>

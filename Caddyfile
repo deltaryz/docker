@@ -86,6 +86,24 @@ pvfm.deltaryz.com {
 }
 
 
+# dev.paws-on.me (browser VS Code -- the code-server container, on dockernet)
+# HTTPS comes from ACME; the auth is basic auth here, not in code-server, because
+# code-server has no usernames and this way there is exactly one prompt.
+# The container publishes no host port, so this vhost is the only door.
+dev.paws-on.me {
+    tls mail@deltaryz.com
+    # Credentials live in Caddyfile.local, which is gitignored -- this repo is
+    # public, and caddy 1.0.3's basicauth only accepts PLAINTEXT (a bcrypt hash
+    # is treated as the literal password and every login 401s), so keeping the
+    # line here would publish the password. Caddyfile.local.example is the shape;
+    # copy it to Caddyfile.local on any host that runs caddy.
+    import Caddyfile.local
+    proxy / http://code-server:8443 {
+        websocket
+        transparent
+    }
+}
+
 # floof.zone
 floof.zone {
     tls mail@deltaryz.com

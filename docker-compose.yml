@@ -29,6 +29,10 @@ services:
       - "443:443"
     volumes:
       - "./Caddyfile:/etc/Caddyfile"
+      # gitignored: holds the basicauth line for dev.paws-on.me. Required for
+      # caddy to start (the Caddyfile imports it); Caddyfile.local.example is
+      # the committed shape.
+      - "./Caddyfile.local:/etc/Caddyfile.local:ro"
       - "caddy_data:/root/.caddy"
       - "/home/delta/web:/srv"
       # request log with no identifiers (method/path/status only) -- see the
@@ -146,15 +150,16 @@ services:
 
   # Browser VS Code for the iPad (and any other browser).
   #
-  # Access control is the tailnet, by deltaryz's decision: the port is published
-  # only on the tailnet IP (same pattern as syncthing and rasync), so nothing on
-  # the LAN or the internet can reach it, and code-server runs with auth none --
-  # no login, no password to lose. Her call and a deliberate one: devious is on
-  # this tailnet and trusted, and "if anyone untrusted gets into my tailnet I have
-  # bigger problems". Note what that means in practice: tailnet access to this
-  # port is a shell on doritosrv as delta (see the ssh key below), and delta is in
-  # the docker group. To re-gate it later, set HASHED_PASSWORD (sha256 of a
-  # password) in .env and it picks up auth=password on the next recreate.
+  # Reached as https://dev.paws-on.me/, which is the ONLY way in: this container
+  # publishes no host port at all, caddy proxies to it over dockernet, and the
+  # auth lives in the vhost (basicauth) rather than here. That split is on
+  # purpose -- code-server has no concept of usernames, so it can only ask for a
+  # password, and two login prompts on an iPad is worse than one.
+  # It was tailnet-only with no auth for a few minutes earlier; a DNS record and
+  # a caddy vhost replaced that, so treat this as internet-reachable behind basic
+  # auth and nothing more.
+  # Note what access means in practice: whoever gets in has a shell on doritosrv
+  # as delta (see the ssh key below), and delta is in the docker group.
   #
   # It sees exactly ONE host path: /home/delta/dev. Note the mount point is
   # /code, not /dev -- a bind mount at /dev makes the whole container
@@ -177,8 +182,9 @@ services:
       - PGID=1002
       - TZ=America/Los_Angeles
       - DEFAULT_WORKSPACE=/code
-    ports:
-      - "100.103.133.29:8443:8443"
+      # no PASSWORD/HASHED_PASSWORD on purpose: the linuxserver init reads their
+      # presence to decide --auth password. Absent = auth none = one prompt, at
+      # the caddy vhost.
     extra_hosts:
       - "host.docker.internal:host-gateway"
     volumes:
