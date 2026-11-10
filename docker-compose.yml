@@ -144,6 +144,46 @@ services:
       - PORT=8080
     mem_limit: 128m
 
+  # Browser VS Code for the iPad (and any other browser). Two gates, both
+  # deliberate:
+  #   1. the port is published only on the tailnet IP, same as syncthing and
+  #      rasync -- nothing on the LAN or the internet can reach it;
+  #   2. a hashed password, because devious's machines are on this tailnet too
+  #      and this service is a shell on doritosrv, not a web page.
+  # The hash lives in .env (gitignored), never in this file.
+  #
+  # It sees exactly ONE host path: /home/delta/dev. Note the mount point is
+  # /code, not /dev -- a bind mount at /dev makes the whole container
+  # unstartable (runc: "can't mask paths: open /dev/null: no such file or
+  # directory"), because /dev is a masked device filesystem. /code is opened by
+  # default via DEFAULT_WORKSPACE.
+  #
+  # /config/.ssh is the container's own key, mounted read-only-ish (it needs to
+  # write known_hosts) so `ssh doritosrv` in the integrated terminal lands on the
+  # host as delta with no password. The public half is in
+  # /home/delta/.ssh/authorized_keys; regenerate both if you rotate it.
+  code-server:
+    networks:
+      - dockernet
+    image: lscr.io/linuxserver/code-server:latest
+    container_name: code-server
+    restart: always
+    environment:
+      - PUID=1002            # = delta on this host, so files in /code are his
+      - PGID=1002
+      - TZ=America/Los_Angeles
+      - HASHED_PASSWORD=${CODESERVER_HASHED_PASSWORD}
+      - DEFAULT_WORKSPACE=/code
+    ports:
+      - "100.103.133.29:8443:8443"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - "/home/delta/dev:/code"
+      - "/home/delta/codeserver:/config"
+      - "/home/delta/codeserver-ssh:/config/.ssh"
+    mem_limit: 1g
+
 volumes:
   caddy_data:
 
