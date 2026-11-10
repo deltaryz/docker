@@ -31,6 +31,10 @@ services:
       - "./Caddyfile:/etc/Caddyfile"
       - "caddy_data:/root/.caddy"
       - "/home/delta/web:/srv"
+      # request log with no identifiers (method/path/status only) -- see the
+      # `log` block on pvfm.deltaryz.com in the Caddyfile. Non-identifiable, so
+      # retaining it is fine; it is the only log this container keeps.
+      - "./caddy-logs:/logs"
 
   # Syncthing file sync daemon and webui
   syncthing:

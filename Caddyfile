@@ -66,6 +66,23 @@ pvfm.deltaryz.com {
     # artwork stay direct -- plain <audio>/<img> loads were never gated.
     # pvfm-proxy in docker-compose.yml
     proxy /data/ http://pvfm-proxy:8080
+
+    # Request log with NO identifiers (deltaryz, 2026-11-09). Caddy v1 cannot
+    # take a custom format on a site-level log block ("format" is rejected there
+    # -- wrong argument count), so this is the default common format with
+    # `ipmask 0.0.0.0`: the client address is masked to 0.0.0.0, leaving only
+    # timestamp, method, path and status. Verified: masks to 0.0.0.0, not to a
+    # /0 mask that keeps everything. That is no personal data, so keeping it is
+    # fine and it is the only place abuse shows up now that the container runs
+    # with logging driver "none" (the error log, which DOES print client IPs on
+    # TLS handshake failures, is therefore stored nowhere).
+    # Query strings pass through as sent -- the app's calls carry none.
+    log /logs/pvfm-access.log {
+        ipmask 0.0.0.0
+        rotate_size 4
+        rotate_keep 2
+        rotate_age 7
+    }
 }
 
 
