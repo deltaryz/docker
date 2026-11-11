@@ -125,6 +125,10 @@ services:
       - /mnt/array/jellyfin/anime:/share/jellyfin/anime
       - /mnt/array/jellyfin/movies:/share/jellyfin/movies
       - /mnt/array/jellyfin/youtube:/share/jellyfin/youtube
+      # trickplay lives on the array: Jellyfin derives it from DataPath
+      # (BaseApplicationPaths.cs -> Path.Combine(DataPath, "trickplay")), so this
+      # bind shadows /config/data/trickplay and the paths it writes stay identical.
+      - /mnt/array/jellyfin/trickplay:/trickplay
     devices:
       - /dev/dri:/dev/dri
     restart: always
