@@ -36,3 +36,4 @@ slskd-data/
 *.rej
 .env.*
 Caddyfile.local
+*.bak*
