@@ -1,0 +1,55 @@
+/* share.deltaryz.com pink/purple dark theme, loaded after main.css + inline overrides */
+body{color:#e6d9f2;background:radial-gradient(ellipse 120% 70% at 50% 0%,#2e1840 0%,#120c1a 70%) no-repeat,#120c1a}
+a{color:#f29bd4}
+a:hover,a:focus{color:#ffc4ea}
+::selection{background:#c25aa6;color:#fff}
+::-moz-selection{background:#c25aa6;color:#fff}
+
+/* header */
+#navigation h1{background:linear-gradient(90deg,#ff8fc8,#c48bff);-webkit-background-clip:text;background-clip:text;color:transparent;text-shadow:none;filter:drop-shadow(0 2px 6px rgba(200,90,190,.35))}
+.page-title,h2,h4{color:#eadcff}
+h3{color:#f2e6ff}
+h4 b{color:#ffb3df}
+
+/* terminal windows */
+.terminal-top{background:radial-gradient(circle at 18px 50%,#ff7aa8 5px,transparent 6px),radial-gradient(circle at 36px 50%,#ffc46b 5px,transparent 6px),radial-gradient(circle at 54px 50%,#9be39b 5px,transparent 6px),linear-gradient(90deg,#6b3394,#b0478f);height:28px}
+#from-terminal,#samples .terminal{border-radius:6px}
+#home #from-terminal{filter:drop-shadow(0 12px 22px rgba(0,0,0,.6))}
+#home #web{background:linear-gradient(180deg,#2c1b41,#251838)}
+#home #terminal.terminal{background:linear-gradient(180deg,#251838,#1c1229)}
+#samples .terminal{background:linear-gradient(170deg,#2a1a3e,#1c1229);box-shadow:0 10px 26px rgba(0,0,0,.5),0 0 0 1px rgba(255,140,210,.08)}
+#samples .terminal-top{box-shadow:0 0 0 1px rgba(255,140,210,.08)}
+#web .code-title,.terminal .code-title{color:#ff8fc8}
+#web,.terminal{color:#efe4fa}
+.dragged{background:#3a2352!important}
+
+/* upload drop box */
+#web>.code-wrapper{border-color:#d08cff;background:linear-gradient(135deg,rgba(208,140,255,.16),rgba(255,120,200,.10));box-shadow:inset 0 0 18px rgba(208,140,255,.10)}
+#web>.code-wrapper .code-title{color:#e2a8ff}
+#web a.browse{color:#ff9fd6}
+#web.dragged>.code-wrapper{background:linear-gradient(135deg,rgba(208,140,255,.32),rgba(255,120,200,.22))}
+
+/* buttons */
+.btn-cta,#samples .btn-cta,#web .btn-cta{color:#ff8fc8;border-color:#ff8fc8;background:linear-gradient(180deg,rgba(255,143,200,.08),rgba(196,139,255,.06));box-shadow:0 4px 14px rgba(0,0,0,.35)}
+.btn-cta:hover,.btn-cta:focus{color:#1a1024;border-color:transparent;background:linear-gradient(90deg,#ff8fc8,#c48bff);text-decoration:none}
+
+/* expanded sections */
+#features{background:linear-gradient(180deg,#1a1126,#160f21)}
+#features i{color:#c48bff}
+#features p{color:#d6c6e8}
+#samples{background:transparent}
+#share{background:linear-gradient(90deg,#5e2a85,#a33d86);box-shadow:inset 0 8px 20px rgba(0,0,0,.25)}
+
+/* download pages */
+.qrcode img{background:#fff;padding:8px;border-radius:8px;box-shadow:0 8px 22px rgba(0,0,0,.5);box-sizing:content-box}
+#deletion-token{background:#1c1229;color:#efe4fa;border:1px solid #6b3394;border-radius:4px;padding:4px 8px}
+
+/* video.js player (audio/video previews) */
+.video-js .vjs-big-play-button,.video-js .vjs-control-bar,.video-js .vjs-menu-button .vjs-menu-content{background-color:rgba(60,28,88,.82)}
+.video-js .vjs-control-bar{background:linear-gradient(90deg,rgba(90,40,130,.88),rgba(160,60,130,.88))}
+.video-js .vjs-big-play-button{border-color:#ff8fc8;box-shadow:0 6px 18px rgba(0,0,0,.45)}
+.video-js:hover .vjs-big-play-button,.video-js .vjs-big-play-button:focus{background-color:rgba(196,139,255,.55);border-color:#ffc4ea}
+.video-js .vjs-play-progress,.video-js .vjs-volume-level{background:linear-gradient(90deg,#ff8fc8,#c48bff)}
+.video-js .vjs-slider{background-color:rgba(255,255,255,.18)}
+.video-js .vjs-load-progress,.video-js .vjs-load-progress div{background:rgba(255,190,230,.25)}
+.qrcode{margin:0 0 24px}
