@@ -9,11 +9,12 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>{{.Hostname}} - Easy and fast file sharing from the command-line.</title>
-    <meta name="description" content="Easy and fast file sharing from the command-line.">
+    <title>{{.Hostname}} - Easy and fast file sharing</title>
+    <meta name="description" content="Easy and fast file sharing">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
     <link rel="stylesheet" href="styles/main.css">
+    <style>#web{margin-top:0;padding:15px 20px 15px 20px;border-radius:0}#web>.code-wrapper{display:block;padding:14px 18px;border:2px dashed #8fd694;border-radius:10px;background:rgba(143,214,148,.10);font-size:14.5px}@media (min-width:768px){#web>.code-wrapper{font-size:16px}}#web>.code-wrapper .code-title{color:#8fd694;font-weight:bold}#web a.browse{color:#8fd694;font-weight:bold}#web.dragged>.code-wrapper{background:rgba(143,214,148,.25)}#terminal.terminal{min-height:0;padding-top:5px;padding-bottom:22px}#navigation h1{font-size:min(35px,7vw)}#web>.code-wrapper{cursor:pointer}#home .btn-home{margin:12px 0 0;padding:6px 28px;font-size:16px}#home{padding-bottom:30px}#home .btn-home{display:inline-block}#learn-more{cursor:pointer}#home .row>div:last-child{clear:both}#navigation h1{float:none!important}</style>
     <link href='fonts/fonts.css?family=Source+Sans+Pro:100,200,300' rel='stylesheet' type='text/css'>
     <link href='fonts/fonts.css?family=Droid+Sans+Mono' rel='stylesheet' type='text/css'>
     <script src="scripts/vendor/modernizr.js"></script>
@@ -47,40 +48,20 @@
             <a href="/">
                 <h1>{{.Hostname}}</h1>
             </a>
-            <ul class="hidden-xs">
-                <li><a href="#">home</a>
-                </li>
-                <li><a href="#samples">sample use cases</a>
-                </li>
-                <li><a href="#contact">contact us</a>
-                </li>
-            </ul>
         </div>
     </div>
 
 <section id="home">
     <div class="wrapper">
         <h2 class="page-title">
-            Easy file sharing from the command line</h2>
+            Easy file sharing</h2>
         <div class="row animated fadeInDown">
             <div id="from-terminal" class="box col-md-8 col-md-offset-2 col-xs-12">
                 <div class="terminal-top">
 
                 </div>
-                <div id="terminal" class="terminal">
-                    <code class="code-wrapper"><span class="code-title"># Upload using cURL</span>
-                        $ curl --upload-file ./hello.txt {{.WebAddress}}hello.txt
-                        {{.WebAddress}}{{.SampleToken}}/hello.txt
-
-                        <span class="code-title"># Using the shell function</span>
-                        $ transfer hello.txt
-                        ##################################################### 100.0%
-                        {{.WebAddress}}{{.SampleToken2}}/hello.txt
-                    </code>
-                </div>
                 <div id="web">
-                    <code class="code-wrapper">
-                        <span class="code-title"># Upload from web</span>
+                    <code class="code-wrapper"><span class="code-title"># Upload from web</span>
                         Drag your files here, or <a class="browse" href="#"> click to browse.</a>
                     </code>
                     <input type="file" multiple="multiple" style='display: none;' />
@@ -98,16 +79,20 @@
                         </div>
                     </div>
                 </div>
+                <div id="terminal" class="terminal">
+                    <code class="code-wrapper"><span class="code-title"># Upload using cURL</span>
+                        $ curl --upload-file ./hello.txt {{.WebAddress}}hello.txt
+                        {{.WebAddress}}{{.SampleToken}}/hello.txt</code>
+                </div>
             </div>
 
             <div>
-                <a href="#features" class="btn-cta btn-home">learn more</i> </a>
+                <a class="btn-cta btn-home" id="learn-more">learn more</a>
             </div>
         </div>
 </section>
 
-
-
+<div id="more" style="display:none">
 <section id="features">
     <div class="wrapper container">
         <div class="row  animated fadeInDown ">
@@ -405,128 +390,11 @@ goto main
                         </code>
                     </div>
                 </div>               
-                <div class="col-md-6">
-                    <h3>Send us your awesome example</h3>
-                    <div class="terminal-top">
-                    </div>
-                    <div class="terminal">
-                        <code class="code-wrapper"><span class="code-title"># Your awesome sample will be put here</span>
-                        </code>
-                    </div>
-                </div>
             </div>
         </div>
     </div>
 </section>
-
-<section id="share">
-    <div class="wrapper">
-        <h2 class="page-title">Follow on GitHub</h2>
-        <br>
-        <br>
-
-        <iframe src="https://ghbtns.com/github-btn.html?user=dutchcoders&repo=transfer.sh&type=follow&count=true&size=large" allowtransparency="true" frameborder="0" scrolling="0" width="250" height="50"></iframe>
-        <iframe src="https://ghbtns.com/github-btn.html?user=dutchcoders&repo=transfer.sh&type=watch&count=true&size=large" allowtransparency="true" frameborder="0" scrolling="0" width="200" height="50"></iframe>
-    </div>
-</section>
-<section id="reviews">
-    <div class="wrapper">
-        <div class="row">
-            <div class="col-md-8 col-md-offset-2 col-xs-12">
-                <blockquote class="twitter-tweet tweet-xl" lang="en">
-                    <a href="https://twitter.com/FloifyDave/status/517383101425516544">
-                        <img class="twitter-profile" src="images/reviews/dave.jpg" alt="">
-                    </a>
-                    <p><a href="https://twitter.com/dutchcoders">@dutchcoders</a> Thanks for transfer.sh. Just used it for a production purpose for a customer. So great, so easy, so https. :)</p>
-                    <a href="https://twitter.com/FloifyDave/status/517383101425516544">
-                        &mdash; Dave Sims (@FloifyDave)</a>
-                </blockquote>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 col-xs-12">
-                <blockquote class="twitter-tweet" lang="en">
-                    <a href="https://twitter.com/kareemk/status/517029789191118849">
-                        <img class="twitter-profile" src="images/reviews/kareem.jpg" alt="">
-                    </a>
-                    <p><a href="https://twitter.com/dutchcoders">@dutchcoders</a> love transfer.sh! any change we can *pay* for a self-hosted version?</p><a href="https://twitter.com/kareemk/status/517029789191118849">&mdash; Kareem Kouddous (@kareemk) </a>
-                </blockquote>
-            </div>
-            <div class="col-md-6 col-xs-12">
-                <blockquote class="twitter-tweet" lang="en">
-                    <a href="https://twitter.com/drakpz/status/517008058841829376">
-                        <img class="twitter-profile" src="images/reviews/pg.jpeg" alt="">
-                    </a>
-                    <p><a href="http://t.co/JomAmqWYEB">http://t.co/JomAmqWYEB</a> by <a href="https://twitter.com/dutchcoders">@dutchcoders</a> is pure awesomeness! any chance of source on github? :-)</p><a href="https://twitter.com/drakpz/status/517008058841829376">&mdash; PJ Spagnolatti (@drakpz)</a>
-                </blockquote>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-md-6 col-xs-12">
-                <blockquote class="twitter-tweet" lang="en">
-                    <a href="https://twitter.com/jacoblindgren11/status/516975006501203968">
-                        <img class="twitter-profile" src="images/reviews/jacob.jpg" alt="">
-                    </a>
-                    <p>Love transfer.sh! Will be using it from now on! Thanks for the amazing service we can use from the CLI <a href="https://twitter.com/dutchcoders">@dutchcoders</a>
-                    </p><a href="https://twitter.com/jacoblindgren11/status/516975006501203968">&mdash; Jacob Lindgren (@jacoblindgren11) </a>
-                </blockquote>
-            </div>
-            <div class="col-md-6 col-xs-12">
-                <blockquote class="twitter-tweet" lang="en">
-                    <a href="https://twitter.com/arvestad/status/519507976491499521">
-                        <img class="twitter-profile" src="images/reviews/lars.jpg" alt="">
-                    </a>
-                    <p>transfer.sh is my latest fav service! Try simple command-line and web file sharing! <a href="https://t.co/FSrsb1JKJd">https://t.co/FSrsb1JKJd</a>&#10;Thanks <a href="https://twitter.com/dutchcoders">@dutchcoders</a> !</p> <a href="https://twitter.com/arvestad/status/519507976491499521">&mdash; Lars Arvestad (@arvestad)</a>
-                </blockquote>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-
-<section id="share">
-    <div class="wrapper">
-        <h2 class="page-title">Share the love</h2>
-        <ul class="share-buttons">
-            <li>
-                <a href="https://www.facebook.com/sharer/sharer.php?u=http%3A%2F%2Ftransfer.sh&t=" target="_blank" onclick="window.open('https://www.facebook.com/sharer/sharer.php?u=' + encodeURIComponent(document.URL) + '&t=' + encodeURIComponent(document.URL)); return false;"> <i class="icon-facebook"></i>
-                </a>
-            </li>
-            <li>
-                <a href="https://twitter.com/intent/tweet?source=http%3A%2F%2Ftransfer.sh&text=:%20http%3A%2F%2Ftransfer.sh" target="_blank" title="Tweet" onclick="window.open('https://twitter.com/intent/tweet?text=' + encodeURIComponent(document.title) + ':%20'  + encodeURIComponent(document.URL)); return false;"> <i class="icon-twitter"></i>
-            </li>
-            <li>
-                <a href="http://www.linkedin.com/shareArticle?mini=true&url=http%3A%2F%2Ftransfer.sh&title=&summary=&source=http%3A%2F%2Ftransfer.sh" target="_blank" title="Share on LinkedIn" onclick="window.open('http://www.linkedin.com/shareArticle?mini=true&url=' + encodeURIComponent(document.URL) + '&title=' +  encodeURIComponent(document.title)); return false;"> <i class="icon-linkedin"></i>
-                </a>
-            </li>
-        </ul>
-    </div>
-</section>
-
-
-<section id="contact">
-    <div class="wrapper">
-        <i class="icon-mail"></i>
-        <h2 class="page-title">
-            Any questions?
-        </h2>
-        <a href="mailto:{{.EmailContact}}" data-uv-trigger class="btn-cta">contact us</a>
-    </div>
-</section>
-
-
-<footer>
-    <div class="wrapper">
-        <img src="images/Logo-orange.png" alt="Founded in Holland">
-        <p>Made with <i class="icon-heart"></i> by <a href="http://blog.dutchcoders.io/" title="Dutch Coders">Dutch Coders</a>
-        </p>
-    </div>
-
-</footer>
-
-
-<a href="https://github.com/dutchcoders/transfer.sh/"><img style="position: absolute; top: 0; right: 0; border: 0;" src="https://camo.githubusercontent.com/38ef81f8aca64bb9a64448d0d70f1308ef5341ab/68747470733a2f2f73332e616d617a6f6e6177732e636f6d2f6769746875622f726962626f6e732f666f726b6d655f72696768745f6461726b626c75655f3132313632312e706e67" alt="Fork me on GitHub" data-canonical-src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png"></a>
+</div>
 
     <script>
     (function() {
@@ -550,6 +418,8 @@ goto main
   
 
     <script src="./scripts/main.js"></script>
+    <script>$("#web > .code-wrapper").on("click",function(){$("#web input[type=file]").click()})</script>
+    <script>$("#learn-more").on("click",function(){var m=$("#more"),open=m.is(":visible");m.slideToggle(400);$(this).text(open?"learn more":"show less");return false})</script>
 
 
 
