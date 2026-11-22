@@ -242,23 +242,22 @@ services:
       - /mnt/array/staging/nzb:/downloads
     restart: always
 
-  # PS3netsrv -- serves the array's PS3 folder to a CFW PS3 over the LAN.
+  # PS3netsrv -- serves the array's console folders to a CFW PS3 over the LAN.
   # The binary is a static x86-64 ELF (build 20250126, aldostools mod) mounted from
   # the host because nothing publishes a maintained image for it. argv is
   # `<path> <port>`, and the atybox copy passed neither: it served its working
   # directory, which held an empty PS3ISO, which is why it looked broken.
-  # The served root is /home/delta/ps3root, not the array itself: that folder holds
-  # 7 .iso files beside 4,383 .dkey ones, and handing a console a 4,390-entry listing
-  # is what stalled the first working scan. ps3root is symlinks into the array, so the
-  # array is mounted too, at the same absolute path, for them to resolve.
+  # The array folders are mounted directly; the .dkey files that used to sit beside
+  # the ISOs are in PS3/keys, and webMAN has "scan remote sub-directories" off, so
+  # they are not enumerated.
   ps3netsrv:
     image: debian:bookworm-slim
     container_name: ps3netsrv
     command: /opt/ps3netsrv/ps3netsrv /data 38008
     volumes:
       - /home/delta/ps3netsrv/ps3netsrv_linuxX86_64:/opt/ps3netsrv/ps3netsrv:ro
-      - /home/delta/ps3root:/data:ro
-      - /mnt/array:/mnt/array:ro
+      - "/mnt/array/roms (big)/PS3:/data/PS3ISO:ro"
+      - "/mnt/array/roms (big)/PS2:/data/PS2ISO:ro"
     ports:
       - "38008:38008/tcp"
       # webMAN's LAN scan probes on UDP as well as dialling TCP (several guides
