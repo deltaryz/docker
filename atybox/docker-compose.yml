@@ -133,18 +133,6 @@ services:
     environment:
       - BASEDIR=/data
 
-  # PS3netsrv
-  ps3netsrv:
-    image: debian:bookworm-slim
-    container_name: ps3netsrv
-    volumes:
-      - /home/share/ps3netsrv:/data:ro
-    working_dir: /data
-    ports:
-      - "38008:38008"
-    command: /data/ps3netsrv_linuxX86_64
-    restart: always
-
   # Gluetun VPN (Mullvad)
   vpn:
     image: qmcgaw/gluetun:latest
