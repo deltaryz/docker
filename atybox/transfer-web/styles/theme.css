@@ -53,3 +53,7 @@ h4 b{color:#ffb3df}
 .video-js .vjs-slider{background-color:rgba(255,255,255,.18)}
 .video-js .vjs-load-progress,.video-js .vjs-load-progress div{background:rgba(255,190,230,.25)}
 .qrcode{margin:0 0 24px}
+
+/* breathing room around the home terminal */
+#home .page-title{margin-bottom:34px}
+#home .btn-home{margin-top:30px}
