@@ -247,21 +247,18 @@ services:
   # the host because nothing publishes a maintained image for it. argv is
   # `<path> <port>`, and the atybox copy passed neither: it served its working
   # directory, which held an empty PS3ISO, which is why it looked broken.
-  # The array folder is bound to /data/PS3ISO so the client sees a normal PS3ISO
-  # tree at the server root, the layout webMAN MOD expects.
+  # The served root is /home/delta/ps3root, not the array itself: that folder holds
+  # 7 .iso files beside 4,383 .dkey ones, and handing a console a 4,390-entry listing
+  # is what stalled the first working scan. ps3root is symlinks into the array, so the
+  # array is mounted too, at the same absolute path, for them to resolve.
   ps3netsrv:
     image: debian:bookworm-slim
     container_name: ps3netsrv
     command: /opt/ps3netsrv/ps3netsrv /data 38008
     volumes:
       - /home/delta/ps3netsrv/ps3netsrv_linuxX86_64:/opt/ps3netsrv/ps3netsrv:ro
-      # One bind per console folder, each named the way webMAN's scanner looks for
-      # it at the server root. PS1 here is .bin/.cue (+22 .chd) and has no .iso at
-      # all, so webMAN's PSXISO mount (which wants .iso) will not see those titles.
-      - "/mnt/array/roms (big)/PS3:/data/PS3ISO:ro"
-      - "/mnt/array/roms (big)/PS2:/data/PS2ISO:ro"
-      - "/mnt/array/roms (big)/PS1:/data/PSXISO:ro"
-      - "/mnt/array/roms (big)/PSP:/data/PSPISO:ro"
+      - /home/delta/ps3root:/data:ro
+      - /mnt/array:/mnt/array:ro
     ports:
       - "38008:38008/tcp"
       # webMAN's LAN scan probes on UDP as well as dialling TCP (several guides
