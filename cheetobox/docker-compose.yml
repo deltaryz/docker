@@ -257,11 +257,11 @@ services:
     volumes:
       - /home/delta/ps3netsrv/ps3netsrv_linuxX86_64:/opt/ps3netsrv/ps3netsrv:ro
       - "/mnt/array/roms (big)/PS3:/data/PS3ISO:ro"
-      # PS2 gets its own directory of symlinks: the array folder also holds bin/cue,
-      # .chd and a BIOS dir, and webMAN would try to identify all of it.
-      - /home/delta/ps2iso:/data/PS2ISO:ro
-      # same absolute path, because the symlinks above point at it
-      - "/mnt/array/roms (big)/PS2:/mnt/array/roms (big)/PS2:ro"
+      # Direct mount. A directory of symlinks into the array did NOT work: ps3netsrv
+      # refuses to follow links pointing outside its root, so the folder listed as
+      # present-but-empty on the console. The folder's handful of bin/cue/.chd and a
+      # BIOS dir are collateral and do not stop the ISOs from listing.
+      - "/mnt/array/roms (big)/PS2:/data/PS2ISO:ro"
     ports:
       - "38008:38008/tcp"
       # webMAN's LAN scan probes on UDP as well as dialling TCP (several guides
