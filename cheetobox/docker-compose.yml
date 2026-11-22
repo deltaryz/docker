@@ -242,6 +242,24 @@ services:
       - /mnt/array/staging/nzb:/downloads
     restart: always
 
+  # PS3netsrv -- serves the array's PS3 folder to a CFW PS3 over the LAN.
+  # The binary is a static x86-64 ELF (build 20250126, aldostools mod) mounted from
+  # the host because nothing publishes a maintained image for it. argv is
+  # `<path> <port>`, and the atybox copy passed neither: it served its working
+  # directory, which held an empty PS3ISO, which is why it looked broken.
+  # The array folder is bound to /data/PS3ISO so the client sees a normal PS3ISO
+  # tree at the server root, the layout webMAN MOD expects.
+  ps3netsrv:
+    image: debian:bookworm-slim
+    container_name: ps3netsrv
+    command: /opt/ps3netsrv/ps3netsrv /data 38008
+    volumes:
+      - /home/delta/ps3netsrv/ps3netsrv_linuxX86_64:/opt/ps3netsrv/ps3netsrv:ro
+      - "/mnt/array/roms (big)/PS3:/data/PS3ISO:ro"
+    ports:
+      - "38008:38008"
+    restart: unless-stopped
+
 networks:
   mc-internal:
     # Internal network for minecraft <-> opencode communication
