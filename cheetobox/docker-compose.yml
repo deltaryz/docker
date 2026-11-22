@@ -263,7 +263,11 @@ services:
       - "/mnt/array/roms (big)/PS1:/data/PSXISO:ro"
       - "/mnt/array/roms (big)/PSP:/data/PSPISO:ro"
     ports:
-      - "38008:38008"
+      - "38008:38008/tcp"
+      # webMAN's LAN scan probes on UDP as well as dialling TCP (several guides
+      # insist both be open); ps3netsrv itself only binds TCP, but publishing UDP
+      # lets the probe reach the container instead of dying on the host.
+      - "38008:38008/udp"
     restart: unless-stopped
 
 networks:
