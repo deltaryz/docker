@@ -257,7 +257,11 @@ services:
     volumes:
       - /home/delta/ps3netsrv/ps3netsrv_linuxX86_64:/opt/ps3netsrv/ps3netsrv:ro
       - "/mnt/array/roms (big)/PS3:/data/PS3ISO:ro"
-      - "/mnt/array/roms (big)/PS2:/data/PS2ISO:ro"
+      # PS2 gets its own directory of symlinks: the array folder also holds bin/cue,
+      # .chd and a BIOS dir, and webMAN would try to identify all of it.
+      - /home/delta/ps2iso:/data/PS2ISO:ro
+      # same absolute path, because the symlinks above point at it
+      - "/mnt/array/roms (big)/PS2:/mnt/array/roms (big)/PS2:ro"
     ports:
       - "38008:38008/tcp"
       # webMAN's LAN scan probes on UDP as well as dialling TCP (several guides
