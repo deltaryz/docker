@@ -255,7 +255,13 @@ services:
     command: /opt/ps3netsrv/ps3netsrv /data 38008
     volumes:
       - /home/delta/ps3netsrv/ps3netsrv_linuxX86_64:/opt/ps3netsrv/ps3netsrv:ro
+      # One bind per console folder, each named the way webMAN's scanner looks for
+      # it at the server root. PS1 here is .bin/.cue (+22 .chd) and has no .iso at
+      # all, so webMAN's PSXISO mount (which wants .iso) will not see those titles.
       - "/mnt/array/roms (big)/PS3:/data/PS3ISO:ro"
+      - "/mnt/array/roms (big)/PS2:/data/PS2ISO:ro"
+      - "/mnt/array/roms (big)/PS1:/data/PSXISO:ro"
+      - "/mnt/array/roms (big)/PSP:/data/PSPISO:ro"
     ports:
       - "38008:38008"
     restart: unless-stopped
